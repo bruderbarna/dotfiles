@@ -3,13 +3,37 @@ source $VIMRUNTIME/vimrc_example.vim
 "source $VIMRUNTIME/mswin.vim
 "behave mswin
 syntax enable
-filetype indent plugin on
-call pathogen#infect()
 "set paste
 set clipboard=unnamed
 set noesckeys
 let g:airline_powerline_fonts=1
 let g:airline_theme='badwolf'
+
+" Vundle stuff
+filetype off                  " required
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+" Own plugins
+Plugin 'tpope/vim-fugitive'
+Plugin 'L9'
+Plugin 'mileszs/ack.vim'
+Plugin 'romainl/Apprentice'
+Plugin 'jiangmiao/auto-pairs'
+Plugin 'kien/ctrlp.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tomtom/tlib_vim'
+Plugin 'edkolev/tmuxline.vim'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'garbas/vim-snipmate'
+Plugin 'bling/vim-airline'
+Plugin 'othree/vim-autocomplpop'
+Plugin 'honza/vim-snippets'
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
 
 set diffexpr=MyDiff()
 function! MyDiff()
@@ -108,6 +132,7 @@ nnoremap <c-t> :b#<cr>
 nnoremap <leader>bn :bnext<cr>
 nnoremap <leader>bp :bprev<cr>
 command! Q :q
+nnoremap <leader>gs :Gstatus<cr>
 "inoremap jk <esc>
 "inoremap <esc> <nop>
 nnoremap <leader>vrc :e $MYVIMRC<cr>
