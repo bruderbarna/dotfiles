@@ -7,7 +7,6 @@ syntax enable
 set clipboard=unnamed
 set noesckeys
 let g:airline_powerline_fonts=1
-let g:airline_theme='badwolf'
 
 " Vundle stuff
 filetype off                  " required
