@@ -20,19 +20,35 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'L9'
 Plugin 'mileszs/ack.vim'
 Plugin 'romainl/Apprentice'
-Plugin 'jiangmiao/auto-pairs'
+"Plugin 'jiangmiao/auto-pairs'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'tomtom/tlib_vim'
-Plugin 'edkolev/tmuxline.vim'
-Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'garbas/vim-snipmate'
-Plugin 'bling/vim-airline'
-Plugin 'othree/vim-autocomplpop'
+"Plugin 'edkolev/tmuxline.vim'
+"Plugin 'MarcWeber/vim-addon-mw-utils'
+"Plugin 'garbas/vim-snipmate'
+"Plugin 'bling/vim-airline'
+Plugin 'jansenfuller/crayon'
+Plugin 'Shougo/neocomplete.vim'
+Plugin 'fatih/vim-go'
+Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-repeat'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+let g:neocomplete#enable_at_startup = 1
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-y>"
+let g:go_fmt_command = "goimports"
+let g:go_list_type = "quickfix"
+let g:go_auto_type_info = 1
+set updatetime=250
+set autowrite
 
 set diffexpr=MyDiff()
 function! MyDiff()
@@ -67,8 +83,8 @@ set rnu
 set wrap
 set history=200
 set smartindent
-set tabstop=4
-set shiftwidth=4
+set tabstop=8
+set shiftwidth=8
 set expandtab
 set so=4
 set wildmenu
@@ -95,7 +111,7 @@ set nowb
 set noswapfile
 set viminfo^=%
 set laststatus=2
-set cursorline
+"set cursorline
 exec "set listchars=trail:\uBB,nbsp:~"
 set nolist
 set t_vb=""
@@ -122,6 +138,18 @@ set t_ut=
 let mapleader=','
 let g:mapleader=','
 
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage)
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+au FileType go nmap <Leader>s <Plug>(go-implements)
+au FileType go nmap <Leader>a :GoAlternate<cr>
 nnoremap n nzz
 nnoremap N Nzz
 "inoremap jk <esc>
@@ -136,7 +164,7 @@ nnoremap <leader>gs :Gstatus<cr>
 "inoremap <esc> <nop>
 nnoremap <leader>vrc :e $MYVIMRC<cr>
 nnoremap <leader>f :NERDTreeToggle<cr>
-"nnoremap <leader>w :w<cr>
+nnoremap <leader>w :w<cr>
 nnoremap <leader>q :q<cr>
 command! Q :q
 nnoremap <leader>lf :CtrlP<cr>
@@ -151,14 +179,16 @@ noremap <C-l> <C-W>l
 nnoremap <C-u> <C-u>zz
 nnoremap <C-d> <C-d>zz
 noremap <leader>cd :cd %:p:h<cr>:pwd<cr>
-no <down> <Nop>
-no <left> <Nop>
-no <right> <Nop>
-no <up> <Nop>
 ino <left> <Nop>
 ino <right> <Nop>
 ino <down> <c-n>
 ino <up> <c-p>
+nmap é [
+nmap á ]
+omap é [
+omap á ]
+xmap é [
+xmap á ]
 
 if &term =~ "xterm"
   " 256 colors
