@@ -35,10 +35,19 @@ Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-repeat'
+Plugin 'vim-scripts/c.vim'
+Plugin 'Valloric/YouCompleteMe'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+" c related
+set exrc
+set secure
+let &path.="/usr/include/AL,"
+set includeexpr=substitute(v:fname,'\\.','/','g')
+nnoremap <F4> :make!<cr>
+" end c related
 
 let g:neocomplete#enable_at_startup = 1
 let g:UltiSnipsExpandTrigger="<tab>"
