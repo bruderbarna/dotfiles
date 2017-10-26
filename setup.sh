@@ -7,5 +7,6 @@ git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ln -s $DIR/.tmux.conf ~/.tmux.conf
 ln -s $DIR/.vimrc ~/.vimrc
+mkdir -p ~/.vim/temp
 
 vim -c PluginInstall

@@ -36,7 +36,6 @@ Plugin 'honza/vim-snippets'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'vim-scripts/c.vim'
-Plugin 'Valloric/YouCompleteMe'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -47,7 +46,8 @@ set secure
 let &path.="/usr/include/AL,"
 set includeexpr=substitute(v:fname,'\\.','/','g')
 nnoremap <F4> :make!<cr>
-" end c related
+let g:clang_library_path='/usr/lib64/libclang.so'
+" c related end
 
 let g:neocomplete#enable_at_startup = 1
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -115,16 +115,16 @@ set noerrorbells
 set novisualbell
 set t_vb=""
 set tm=500
-set nobackup
-set nowb
-set noswapfile
 set viminfo^=%
 set laststatus=2
 "set cursorline
 exec "set listchars=trail:\uBB,nbsp:~"
 set nolist
 set t_vb=""
-set makeprg=gcc\ %\ -o\ %:r.exe
+
+set dir=~/.vim/temp,tmp
+set backupdir=~/.vim/temp,tmp
+set undodir=~/.vim/temp,tmp
 
 set term=xterm
 let &t_AB="\e[48;5;%dm"
