@@ -122,9 +122,9 @@ exec "set listchars=trail:\uBB,nbsp:~"
 set nolist
 set t_vb=""
 
-set dir=~/.vim/temp,tmp
-set backupdir=~/.vim/temp,tmp
-set undodir=~/.vim/temp,tmp
+set dir=~/.vim/temp,/tmp
+set backupdir=~/.vim/temp,/tmp
+set undodir=~/.vim/temp,/tmp
 
 set term=xterm
 let &t_AB="\e[48;5;%dm"
