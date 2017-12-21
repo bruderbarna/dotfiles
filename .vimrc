@@ -29,13 +29,14 @@ Plugin 'tomtom/tlib_vim'
 "Plugin 'garbas/vim-snipmate'
 "Plugin 'bling/vim-airline'
 Plugin 'jansenfuller/crayon'
-Plugin 'Shougo/neocomplete.vim'
+"Plugin 'Shougo/neocomplete.vim'
 Plugin 'fatih/vim-go'
 Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'vim-scripts/c.vim'
+Plugin 'vim-scripts/AutoComplPop'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -49,7 +50,6 @@ nnoremap <F4> :make!<cr>
 let g:clang_library_path='/usr/lib64/libclang.so'
 " c related end
 
-let g:neocomplete#enable_at_startup = 1
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-y>"
@@ -109,8 +109,9 @@ set history=20
 set showmatch
 set mat=2
 set numberwidth=5
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \l:\ %l\ c:\ %c
+"set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \l:\ %l\ c:\ %c
 set statusline=\ %F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \l:\ %l\ c:\ %c
+set statusline=\ %F%m%r%h\ %w\ \l:\ %l\ c:\ %c
 set noerrorbells
 set novisualbell
 set t_vb=""
@@ -161,6 +162,8 @@ au FileType go nmap <Leader>s <Plug>(go-implements)
 au FileType go nmap <Leader>a :GoAlternate<cr>
 nnoremap n nzz
 nnoremap N Nzz
+nnoremap <c-y> 5<c-y>
+nnoremap <c-e> 5<c-e>
 "inoremap jk <esc>
 "inoremap <esc> <nop>
 nnoremap <c-i> "fddO
