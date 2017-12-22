@@ -37,6 +37,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'vim-scripts/c.vim'
 Plugin 'vim-scripts/AutoComplPop'
+Plugin 'Arkham/vim-tango'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
