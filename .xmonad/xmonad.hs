@@ -48,7 +48,7 @@ myLauncher = "$(yeganesh -x -- -fn 'xft:ProggySquareTT:pixelsize=11' -nb '#00000
 -- Workspaces
 -- The default number of workspaces (virtual screens) and their names.
 --
-myWorkspaces = ["1:term","2:web","3:code","4:vm","5:media"] ++ map show [6..9]
+myWorkspaces = ["1:term","2:web","3:code","4:media"] ++ map show [5..9]
 
 
 ------------------------------------------------------------------------
@@ -91,13 +91,13 @@ myManageHook = composeAll
 -- which denotes layout choice.
 --
 myLayout = avoidStruts (
-    spacingWithEdge 10 $ ThreeColMid 1 (3/100) (1/2) |||
-    Tall 1 (3/100) (1/2) |||
-    Mirror (Tall 1 (3/100) (1/2)) |||
-    --tabbed shrinkText tabConfig |||
-    Full |||
-    spiral (6/7)) |||
-    noBorders (fullscreenFull Full)
+            spacingWithEdge 10 (ThreeColMid 1 (3/100) (1/2)) |||
+            spacingWithEdge 10 (Tall 1 (3/100) (1/2)) |||
+            spacingWithEdge 10 (Mirror (Tall 1 (3/100) (1/2))) |||
+            --tabbed shrinkText tabConfig |||
+            Full |||
+            spacingWithEdge 5 (spiral (6/7))) |||
+            noBorders (fullscreenFull Full)
 
 
 ------------------------------------------------------------------------
@@ -304,7 +304,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 -- Focus rules
 -- True if your focus should follow your mouse cursor.
 myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
+myFocusFollowsMouse = False
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
   [
