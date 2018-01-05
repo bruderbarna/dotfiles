@@ -195,10 +195,10 @@ nnoremap <leader>/ :silent noh<cr>
 nnoremap <leader>o o<esc>k
 vnoremap > >gv
 vnoremap < <gv
-noremap <C-j> <C-W>j
-noremap <C-k> <C-W>k
-noremap <C-h> <C-W>h
-noremap <C-l> <C-W>l
+nnoremap <C-j> <C-W>j
+nnoremap <C-k> <C-W>k
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
 nnoremap <C-u> <C-u>zz
 nnoremap <C-d> <C-d>zz
 noremap <leader>cd :cd %:p:h<cr>:pwd<cr>
