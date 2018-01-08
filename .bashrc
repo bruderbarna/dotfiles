@@ -20,3 +20,5 @@ GIT_PROMPT_THEME=Single_line_Minimalist
 source ~/dotfiles/bashgitprompt/gitprompt.sh
 
 export EDITOR="vim"
+
+export PATH=$PATH:/home/barna/bin
