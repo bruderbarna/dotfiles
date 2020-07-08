@@ -60,6 +60,7 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'groenewege/vim-less'
 Plug 'jesseleite/vim-noh'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'nicwest/vim-camelsnek'
 
 " auto pairs
 Plug 'jiangmiao/auto-pairs'
