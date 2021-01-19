@@ -8,6 +8,7 @@ call plug#begin()
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-repeat'
 
 " fugitive & bitbucket Gbrowse extension
 Plug 'tpope/vim-fugitive'
@@ -17,6 +18,8 @@ Plug 'tommcdo/vim-fubitive'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-line'
+Plug 'kana/vim-textobj-function'
+Plug 'thinca/vim-textobj-function-javascript'
 Plug 'vim-scripts/ReplaceWithRegister'
 
 " markdown preview
@@ -25,9 +28,6 @@ Plug 'JamshedVesuna/vim-markdown-preview'
 " Go support
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
-" proto syntax
-Plug 'bruderbarna/vim-protobuf'
-
 " file tree
 Plug 'scrooloose/nerdtree'
 let g:NERDTreeShowHidden = 1
@@ -35,7 +35,6 @@ let g:NERDTreeMinimalUI = 1
 
 " colorschemes
 Plug 'arcticicestudio/nord-vim'
-Plug 'zefei/simple-dark'
 
 " autocomplete, code actions, lint and more
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -52,6 +51,8 @@ Plug 'HerringtonDarkholme/yats.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'othree/yajs.vim'
 Plug 'vim-scripts/groovy.vim'
+Plug 'bruderbarna/vim-protobuf'
+Plug 'MaxMEllon/vim-jsx-pretty'
 
 " misc convenience oriented plugins
 Plug 'mattn/emmet-vim'
@@ -71,6 +72,9 @@ let g:AutoPairsShortcutToggle = ''
 
 call plug#end()
 filetype plugin indent on
+
+" use html filetype for ftl files
+au BufNewFile,BufRead *.ftl set filetype=html
 
 set encoding=utf-8
 set clipboard=unnamed
@@ -114,10 +118,11 @@ set mouse=a
 set updatetime=300
 
 " color
+set t_8f=[38;2;%lu;%lu;%lum
+set t_8b=[38;2;%lu;%lu;%lum
+colorscheme nord
 set termguicolors
 set t_Co=256
-set background=dark
-colorscheme nord
 
 try
 " === Denite setup ==="
@@ -197,7 +202,7 @@ autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 " Define mappings while in 'filter' mode
 "   <C-o>         - Switch to normal mode inside of search results
 "   <Esc>         - Exit denite window in any mode
-"   <CR>          - Open currently selected file in any mode
+"   <cr>          - Open currently selected file in any mode
 autocmd FileType denite-filter call s:denite_filter_my_settings()
 function! s:denite_filter_my_settings() abort
   imap <silent><buffer> <C-o>
@@ -206,19 +211,19 @@ function! s:denite_filter_my_settings() abort
   \ denite#do_map('quit')
   nnoremap <silent><buffer><expr> <Esc>
   \ denite#do_map('quit')
-  inoremap <silent><buffer><expr> <CR>
+  inoremap <silent><buffer><expr> <cr>
   \ denite#do_map('do_action')
 endfunction
 
 " Define mappings while in denite window
-"   <CR>        - Opens currently selected file
+"   <cr>        - Opens currently selected file
 "   q or <Esc>  - Quit Denite window
 "   d           - Delete currenly selected file
 "   p           - Preview currently selected file
 "   <C-o> or i  - Switch to insert mode inside of filter prompt
 autocmd FileType denite call s:denite_my_settings()
 function! s:denite_my_settings() abort
-  nnoremap <silent><buffer><expr> <CR>
+  nnoremap <silent><buffer><expr> <cr>
   \ denite#do_map('do_action')
   nnoremap <silent><buffer><expr> q
   \ denite#do_map('quit')
@@ -292,7 +297,7 @@ com! DiffSaved call s:DiffSaved()
 
 " fzf extension: include untracked git files
 function! s:FzfGitFilesWithUntracked()
-    call fzf#run(fzf#wrap({'source': '{ git ls-files & git ls-files --exclude-standard --others; }'}))
+    call fzf#run(fzf#wrap({'source': '{ git ls-files & git ls-files --exclude-standard --others | sort | uniq; }'}))
 endfunction
 com! FzfGitFilesWithUntracked call s:FzfGitFilesWithUntracked()
 
@@ -300,19 +305,20 @@ nnoremap <leader>vrc :e $MYVIMRC<cr>
 nnoremap <leader>r :w<cr>:e<cr>
 nnoremap <silent> <leader>/ :noh<cr>
 nnoremap <silent> <leader>ju :call GotoJump()<cr>
-nnoremap <leader>w :Windows<CR>
-nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>f :FzfGitFilesWithUntracked<CR>
-nnoremap <leader>F :Files<CR>
-nnoremap <leader>s :<C-u>Denite grep:. -no-empty<CR>
-nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<CR>
-nnoremap <leader>ds :DiffSaved<CR>
+nnoremap <leader>w :Windows<cr>
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>f :FzfGitFilesWithUntracked<cr>
+nnoremap <leader>F :Files<cr>
+nnoremap <leader>s :<C-u>Denite grep:. -no-empty<cr>
+nnoremap <leader>sw :%s/\s\+$//e<cr>:noh<cr>
+nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<cr>
+nnoremap <leader>ds :DiffSaved<cr>
 nmap <silent> <leader>gd <Plug>(coc-definition)
 nmap <silent> <leader>gr <Plug>(coc-references)
 nmap <silent> <leader>gi <Plug>(coc-implementation)
 nmap <silent> <leader>rn <Plug>(coc-rename)
 nnoremap <silent> <leader>ca :CocFix<cr>
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+nnoremap <silent> K :call <SID>show_documentation()<cr>
 nnoremap <leader>n :NERDTreeToggle<cr>
 nnoremap <leader>m :NERDTreeFind<cr>
 noremap <leader>cd :cd %:p:h<cr>:pwd<cr>
@@ -345,29 +351,30 @@ nnoremap j gj
 nnoremap k gk
 
 " terminal related rebinds
-tnoremap <Esc> <C-\><C-n>
-tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-tnoremap <A-h> <C-\><C-N><C-w>h
-tnoremap <A-j> <C-\><C-N><C-w>j
-tnoremap <A-k> <C-\><C-N><C-w>k
-tnoremap <A-l> <C-\><C-N><C-w>l
-inoremap <A-h> <C-\><C-N><C-w>h
-inoremap <A-j> <C-\><C-N><C-w>j
-inoremap <A-k> <C-\><C-N><C-w>k
-inoremap <A-l> <C-\><C-N><C-w>l
-nnoremap <A-h> <C-w>h
-nnoremap <A-j> <C-w>j
-nnoremap <A-k> <C-w>k
-nnoremap <A-l> <C-w>l
+" tnoremap <Esc> <C-\><C-n>
+" tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+" tnoremap <C-h> <C-\><C-N><C-w>h
+" tnoremap <C-j> <C-\><C-N><C-w>j
+" tnoremap <C-k> <C-\><C-N><C-w>k
+" tnoremap <C-l> <C-\><C-N><C-w>l
+" inoremap <C-h> <C-\><C-N><C-w>h
+" inoremap <C-j> <C-\><C-N><C-w>j
+" inoremap <C-k> <C-\><C-N><C-w>k
+" inoremap <C-l> <C-\><C-N><C-w>l
+" nnoremap <C-h> <C-w>h
+" nnoremap <C-j> <C-w>j
+" nnoremap <C-k> <C-w>k
+" nnoremap <C-l> <C-w>l
 
 " fugitive binds
 nnoremap <leader>Gd :Gdiff<cr>
 nnoremap <leader>Gs :Gstatus<cr>
 
-" 'fix' typo
+" 'fix' typos
 command! Q :q
 command! Qa :qall
 command! QA :qall
 command! Qall :qall
 command! QAll :qall
 command! W :w
+command! Wa :wa

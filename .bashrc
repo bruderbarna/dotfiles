@@ -75,6 +75,8 @@ alias dp="docker ps"
 alias dpa="docker ps -a"
 alias ectl="docker exec -it videoconference-ejabberd-server /opt/ejabberd-18.01/bin/ejabberdctl"
 
+alias mpv="mpv --sub-paths=\"Subs\""
+
 # Functions
 # function sonu() {
 #     nmcli con up id sonrisa
@@ -85,10 +87,6 @@ alias ectl="docker exec -it videoconference-ejabberd-server /opt/ejabberd-18.01/
 #         done;
 #     done
 # }
-
-function dsm {
-    nohup xdg-open "zoommtg://zoom.us/join?action=join&confno=8839829581" >& /dev/null &
-}
 
 function find-large-files {
     find $1 -xdev -type f -size +100M  -exec du -h {} \;
@@ -115,10 +113,12 @@ source /home/barna/bin/git-subrepo/.rc
 export PATH=$HOME/bin/go1.14:$PATH:$HOME/bin:$HOME/go/bin
 export CHROME_BIN="/usr/bin/chromium-browser"
 export EDITOR=vim
+export VISUAL=vim
 export BROWSER="$CHROME_BIN"
 export JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64/"
 export CDPATH=.:/home/barna/work
 export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
+export ANDROID_HOME=/home/barna/Android/Sdk
 
 # load nvm & setup it's path
 export NVM_DIR="$HOME/.nvm"
