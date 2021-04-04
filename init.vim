@@ -6,27 +6,16 @@ call plug#begin()
 
 " tpope goodness
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-repeat'
-
-" fugitive & bitbucket Gbrowse extension
 Plug 'tpope/vim-fugitive'
-Plug 'tommcdo/vim-fubitive'
 
 " text objects
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-function'
-Plug 'thinca/vim-textobj-function-javascript'
 Plug 'vim-scripts/ReplaceWithRegister'
-
-" markdown preview
-Plug 'JamshedVesuna/vim-markdown-preview'
-
-" Go support
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " file tree
 Plug 'scrooloose/nerdtree'
@@ -40,7 +29,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " magic. used for project search
-Plug 'Shougo/denite.nvim'
+Plug 'Shougo/denite.nvim', { 'tag': '3.2' }
 
 " best thing ever
 Plug '~/.fzf'
@@ -50,18 +39,14 @@ Plug 'junegunn/fzf.vim'
 Plug 'HerringtonDarkholme/yats.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'othree/yajs.vim'
-Plug 'vim-scripts/groovy.vim'
-Plug 'bruderbarna/vim-protobuf'
 Plug 'MaxMEllon/vim-jsx-pretty'
 
 " misc convenience oriented plugins
 Plug 'mattn/emmet-vim'
 let g:user_emmet_leader_key=','
 Plug 'editorconfig/editorconfig-vim'
-Plug 'groenewege/vim-less'
 Plug 'jesseleite/vim-noh'
 Plug 'christoomey/vim-tmux-navigator'
-Plug 'nicwest/vim-camelsnek'
 
 " auto pairs
 Plug 'jiangmiao/auto-pairs'
@@ -73,21 +58,17 @@ let g:AutoPairsShortcutToggle = ''
 call plug#end()
 filetype plugin indent on
 
-" use html filetype for ftl files
-au BufNewFile,BufRead *.ftl set filetype=html
-
 set encoding=utf-8
 set clipboard=unnamed
 set hidden
 set linespace=1
 set number
-set relativenumber
 set nowrap
 set cursorline
 set history=200
 set smartindent
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set expandtab
 set wildmenu
 set ruler
@@ -196,7 +177,7 @@ catch
   echo 'Denite not installed. It should work after running :PlugInstall'
 endtry
 
-"Close preview window when completion is done.
+" Close preview window when completion is done.
 autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
 
 " Define mappings while in 'filter' mode
@@ -259,21 +240,6 @@ function! s:show_documentation()
   endif
 endfunction
 
-" convenient little function that lets you choose a recent position to jump back to
-function! GotoJump()
-  jumps
-  let j = input("Please select your jump: ")
-  if j != ''
-    let pattern = '\v\c^\+'
-    if j =~ pattern
-      let j = substitute(j, pattern, '', 'g')
-      execute "normal " . j . "\<c-i>"
-    else
-      execute "normal " . j . "\<c-o>"
-    endif
-  endif
-endfunction
-
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
@@ -282,8 +248,6 @@ autocmd BufReadPost *
      \ if line("'\"") > 0 && line("'\"") <= line("$") |
      \   exe "normal! g`\"" |
      \ endif
-let mapleader=','
-let g:mapleader=','
 
 " diff current buffer with corresponding file on disk
 function! s:DiffSaved()
@@ -301,18 +265,15 @@ function! s:FzfGitFilesWithUntracked()
 endfunction
 com! FzfGitFilesWithUntracked call s:FzfGitFilesWithUntracked()
 
+let mapleader=','
+let g:mapleader=','
 nnoremap <leader>vrc :e $MYVIMRC<cr>
 nnoremap <leader>r :w<cr>:e<cr>
 nnoremap <silent> <leader>/ :noh<cr>
-nnoremap <silent> <leader>ju :call GotoJump()<cr>
-nnoremap <leader>w :Windows<cr>
-nnoremap <leader>b :Buffers<cr>
 nnoremap <leader>f :FzfGitFilesWithUntracked<cr>
 nnoremap <leader>F :Files<cr>
 nnoremap <leader>s :<C-u>Denite grep:. -no-empty<cr>
-nnoremap <leader>sw :%s/\s\+$//e<cr>:noh<cr>
 nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<cr>
-nnoremap <leader>ds :DiffSaved<cr>
 nmap <silent> <leader>gd <Plug>(coc-definition)
 nmap <silent> <leader>gr <Plug>(coc-references)
 nmap <silent> <leader>gi <Plug>(coc-implementation)
@@ -324,51 +285,15 @@ nnoremap <leader>m :NERDTreeFind<cr>
 noremap <leader>cd :cd %:p:h<cr>:pwd<cr>
 vnoremap > >gv
 vnoremap < <gv
-nnoremap <C-j> <C-W>j
-nnoremap <C-k> <C-W>k
-nnoremap <C-h> <C-W>h
-nnoremap <C-l> <C-W>l
 nnoremap <C-u> <C-u>zz
 nnoremap <C-d> <C-d>zz
 nnoremap n nzz
 nnoremap N Nzz
 nnoremap <F1> <Nop>
 inoremap <F1> <Nop>
-nnoremap j gj
-ino <left> <Nop>
-ino <right> <Nop>
-ino <down> <Nop>
-ino <up> <Nop>
-" vim-unimpaired rebinds
-nmap é [
-nmap á ]
-omap é [
-omap á ]
-xmap é [
-xmap á ]
 " visual line movement
 nnoremap j gj
 nnoremap k gk
-
-" terminal related rebinds
-" tnoremap <Esc> <C-\><C-n>
-" tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
-" tnoremap <C-h> <C-\><C-N><C-w>h
-" tnoremap <C-j> <C-\><C-N><C-w>j
-" tnoremap <C-k> <C-\><C-N><C-w>k
-" tnoremap <C-l> <C-\><C-N><C-w>l
-" inoremap <C-h> <C-\><C-N><C-w>h
-" inoremap <C-j> <C-\><C-N><C-w>j
-" inoremap <C-k> <C-\><C-N><C-w>k
-" inoremap <C-l> <C-\><C-N><C-w>l
-" nnoremap <C-h> <C-w>h
-" nnoremap <C-j> <C-w>j
-" nnoremap <C-k> <C-w>k
-" nnoremap <C-l> <C-w>l
-
-" fugitive binds
-nnoremap <leader>Gd :Gdiff<cr>
-nnoremap <leader>Gs :Gstatus<cr>
 
 " 'fix' typos
 command! Q :q
