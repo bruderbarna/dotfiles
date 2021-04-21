@@ -17,6 +17,9 @@ Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-function'
 Plug 'vim-scripts/ReplaceWithRegister'
 
+" tree sitter highlighting
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
 " file tree
 Plug 'scrooloose/nerdtree'
 let g:NERDTreeShowHidden = 1
@@ -61,7 +64,6 @@ filetype plugin indent on
 set encoding=utf-8
 set clipboard=unnamed
 set hidden
-set linespace=1
 set number
 set nowrap
 set cursorline
@@ -71,7 +73,6 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 set wildmenu
-set ruler
 set cmdheight=1
 set ignorecase
 set smartcase
@@ -80,10 +81,7 @@ set incsearch
 set lazyredraw
 set splitright splitbelow
 set magic
-set history=20
-set showmatch
 set matchpairs+=<:>
-set mat=2
 set numberwidth=5
 set statusline=\ %F%m%r%h\ %w%=%{FugitiveStatusline()}\ \ \l:\ %l\ c:\ %c\ 
 set noerrorbells
@@ -94,7 +92,6 @@ set viminfo^=%
 set laststatus=2
 exec "set listchars=tab:>-,trail:\uBB,nbsp:~"
 set list
-set t_vb=""
 set mouse=a
 set updatetime=300
 
@@ -271,6 +268,7 @@ nnoremap <leader>vrc :e $MYVIMRC<cr>
 nnoremap <leader>r :w<cr>:e<cr>
 nnoremap <silent> <leader>/ :noh<cr>
 nnoremap <leader>f :FzfGitFilesWithUntracked<cr>
+nnoremap <leader>a <C-^>
 nnoremap <leader>F :Files<cr>
 nnoremap <leader>s :<C-u>Denite grep:. -no-empty<cr>
 nnoremap <leader>j :<C-u>DeniteCursorWord grep:.<cr>
@@ -302,4 +300,13 @@ command! QA :qall
 command! Qall :qall
 command! QAll :qall
 command! W :w
+command! WQ :wq
+command! Wq :wq
 command! Wa :wa
+
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = { enable = true },
+}
+EOF
