@@ -17,9 +17,6 @@ Plug 'kana/vim-textobj-line'
 Plug 'kana/vim-textobj-function'
 Plug 'vim-scripts/ReplaceWithRegister'
 
-" tree sitter highlighting
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-
 " file tree
 Plug 'scrooloose/nerdtree'
 let g:NERDTreeShowHidden = 1
@@ -43,6 +40,7 @@ Plug 'HerringtonDarkholme/yats.vim'
 Plug 'othree/javascript-libraries-syntax.vim'
 Plug 'othree/yajs.vim'
 Plug 'MaxMEllon/vim-jsx-pretty'
+Plug 'leafOfTree/vim-vue-plugin'
 
 " misc convenience oriented plugins
 Plug 'mattn/emmet-vim'
@@ -94,13 +92,19 @@ exec "set listchars=tab:>-,trail:\uBB,nbsp:~"
 set list
 set mouse=a
 set updatetime=300
+set colorcolumn=100
 
+if exists('+termguicolors')
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
 " color
-set t_8f=[38;2;%lu;%lu;%lum
-set t_8b=[38;2;%lu;%lu;%lum
+" set t_8f=[38;2;%lu;%lu;%lum
+" set t_8b=[38;2;%lu;%lu;%lum
 colorscheme nord
-set termguicolors
-set t_Co=256
+" set termguicolors
+" set t_Co=256
 
 try
 " === Denite setup ==="
@@ -303,10 +307,3 @@ command! W :w
 command! WQ :wq
 command! Wq :wq
 command! Wa :wa
-
-lua << EOF
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  highlight = { enable = true },
-}
-EOF

@@ -1,4 +1,3 @@
 {
-    "coc.preferences.colorSupport": false,
-    "tsserver.npm": "/home/barna/.nvm/versions/node/v10.13.0/bin/npm"
+    "tsserver.npm": "/home/barna/.nvm/versions/node/v14.16.1/bin/npm"
 }
