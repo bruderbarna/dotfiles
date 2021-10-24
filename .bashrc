@@ -35,7 +35,7 @@ function get-ip() {
 function ss() {
   sh -c '\
     cd /home/barna/work/flexbox/flexbox-warehouse-api && \
-    AWS_PROFILE=dev IS_LOCAL=true /home/barna/work/flexbox/flexbox-warehouse-api/startServer'
+    IS_LOCAL=true /home/barna/work/flexbox/flexbox-warehouse-api/startServer'
 }
 
 # Git prompt
@@ -71,5 +71,8 @@ export PATH=$PATH:$ANDROID_SDK_ROOT/tools/bin
 export PATH=$PATH:$ANDROID_SDK_ROOT/platform-tools
 # emulator
 export PATH=$PATH:$ANDROID_SDK_ROOT/emulator
+
+export GOPATH=~/go
+export PATH="$PATH:$GOPATH/bin"
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
