@@ -45,6 +45,7 @@ Plug 'leafgarland/typescript-vim'
 Plug 'MaxMEllon/vim-jsx-pretty'
 Plug 'peitalin/vim-jsx-typescript'
 Plug 'posva/vim-vue'
+Plug 'hashivim/vim-terraform'
 
 " misc convenience oriented plugins
 Plug 'mattn/emmet-vim'

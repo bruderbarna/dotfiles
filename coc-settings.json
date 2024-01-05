@@ -1,9 +1,3 @@
 {
-    "coc.preferences.colorSupport": false,
-    "tsserver.npm": "/home/barna/.nvm/versions/node/v10.13.0/bin/npm",
-    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
-    "tsserver.log": "verbose",
-    "tsserver.trace.server": "verbose",
-    "tsserver.enableJavascript": false,
-    "vetur.ignoreProjectWarning": true
+    "tsserver.npm": "/home/barna/.nvm/versions/node/v14.16.1/bin/npm"
 }
