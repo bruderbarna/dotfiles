@@ -40,3 +40,5 @@ command! Wq :wq
 command! WQ :wq
 
 lua require('keymap')
+
+lua require('util')

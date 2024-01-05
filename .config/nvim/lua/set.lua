@@ -1,5 +1,5 @@
 vim.opt.encoding = "utf-8"
-vim.opt.clipboard = "unnamed"
+vim.opt.clipboard = "unnamedplus"
 vim.opt.hidden = true
 vim.opt.linespace = 1
 vim.opt.number = true
@@ -36,3 +36,9 @@ vim.opt.termguicolors = true
 
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
+
+-- new
+vim.o.breakindent = true
+vim.o.undofile = true
+vim.wo.signcolumn = 'yes'
+vim.o.completeopt = 'menuone,noselect'

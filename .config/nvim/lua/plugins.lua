@@ -106,10 +106,27 @@ require('lazy').setup({
   "nvim-tree/nvim-tree.lua",
   "nvim-tree/nvim-web-devicons",
   "shaunsingh/nord.nvim",
-  "christoomey/vim-tmux-navigator",
   "folke/trouble.nvim",
   "windwp/nvim-autopairs",
   "windwp/nvim-ts-autotag",
+
+  {
+    "christoomey/vim-tmux-navigator",
+    cmd = {
+      "TmuxNavigateLeft",
+      "TmuxNavigateDown",
+      "TmuxNavigateUp",
+      "TmuxNavigateRight",
+      "TmuxNavigatePrevious",
+    },
+    keys = {
+      { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+      { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
+      { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
+      { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
+      { "<c-i>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
+    },
+  },
 
 }, {})
 
