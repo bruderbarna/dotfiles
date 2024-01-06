@@ -7,12 +7,10 @@ let g:mapleader=","
 lua require('plugins')
 
 exec "set listchars=tab:>-,trail:\uBB,nbsp:~"
+
 lua require('set')
 
 colorscheme nord
-
-" Automaticaly close nvim if NERDTree is only thing left open
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Return to last edit position when opening files
 autocmd BufReadPost *
@@ -44,8 +42,6 @@ command! Wq :wq
 command! WQ :wq
 
 lua require('keymap')
-
 lua require('util')
-
 lua require('lsp')
 lua require('nvim-cmp')
