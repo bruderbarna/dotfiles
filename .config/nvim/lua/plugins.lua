@@ -1,13 +1,13 @@
-local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
+  vim.fn.system({
     "git",
     "clone",
     "--filter=blob:none",
     "https://github.com/folke/lazy.nvim.git",
     "--branch=stable", -- latest stable release
     lazypath,
-  }
+  })
 end
 vim.opt.rtp:prepend(lazypath)
 
@@ -37,7 +37,7 @@ require("lazy").setup({
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require("fidget").setup({})`
-      { "j-hui/fidget.nvim",       opts = {} },
+      { "j-hui/fidget.nvim", opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       "folke/neodev.nvim",
@@ -74,16 +74,6 @@ require("lazy").setup({
   {
     "nvim-telescope/telescope.nvim",
     branch = "0.1.x",
-    opts = {
-      defaults = {
-        mappings = {
-          i = {
-            ["<up>"] = function() require("telescope.actions").cycle_history_prev() end,
-            ["<down>"] = function() require("telescope.actions").cycle_history_next() end,
-          },
-        },
-      },
-    },
     config = function()
       vim.keymap.set(
         "n",
@@ -106,18 +96,41 @@ require("lazy").setup({
         })
       end)
       vim.keymap.set("n", "<leader>f", "<cmd>Telescope git_files<cr>")
-      vim.keymap.set("n", "<leader>F", '<cmd>lua require("telescope.builtin").find_files({follow = true})<cr>')
-      vim.keymap.set("n", "<leader>qr", '<cmd>lua require("telescope.builtin").oldfiles()<cr>')
-      vim.keymap.set("n", "<leader>/", function()
-        -- You can pass additional configuration to telescope to change theme, layout, etc.
-        require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-          winblend = 10,
-          previewer = false,
-        })
-      end, { desc = '[/] Fuzzily search in current buffer' })
-      vim.keymap.set('n', '<leader>qh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
-      vim.keymap.set('n', '<leader>qd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-      vim.keymap.set('n', '<leader>qe', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
+      vim.keymap.set(
+        "n",
+        "<leader>F",
+        '<cmd>lua require("telescope.builtin").find_files({follow = true})<cr>'
+      )
+      vim.keymap.set(
+        "n",
+        "<leader>qr",
+        '<cmd>lua require("telescope.builtin").oldfiles()<cr>'
+      )
+      -- vim.keymap.set("n", "<leader>/", function()
+      --   -- You can pass additional configuration to telescope to change theme, layout, etc.
+      --   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+      --     winblend = 10,
+      --     previewer = false,
+      --   })
+      -- end, { desc = '[/] Fuzzily search in current buffer' })
+      vim.keymap.set(
+        "n",
+        "<leader>qh",
+        require("telescope.builtin").help_tags,
+        { desc = "[S]earch [H]elp" }
+      )
+      vim.keymap.set(
+        "n",
+        "<leader>qd",
+        require("telescope.builtin").diagnostics,
+        { desc = "[S]earch [D]iagnostics" }
+      )
+      vim.keymap.set(
+        "n",
+        "<leader>qe",
+        require("telescope.builtin").resume,
+        { desc = "[S]earch [R]esume" }
+      )
     end,
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -130,7 +143,7 @@ require("lazy").setup({
         --       refer to the README for telescope-fzf-native for more instructions.
         build = "make",
         cond = function()
-          return vim.fn.executable "make" == 1
+          return vim.fn.executable("make") == 1
         end,
         config = function()
           require("telescope").load_extension("fzf")
@@ -152,7 +165,7 @@ require("lazy").setup({
     "kana/vim-textobj-line",
     dependencies = {
       "kana/vim-textobj-user",
-    }
+    },
   },
 
   {
@@ -202,9 +215,9 @@ require("lazy").setup({
         ts_config = {
           lua = { "string" },
           javascript = { "template_string" },
-        }
+        },
       })
-    end
+    end,
   },
 
   "windwp/nvim-ts-autotag",
@@ -234,17 +247,105 @@ require("lazy").setup({
 
       harpoon:setup()
 
-      vim.keymap.set("n", "<leader>hs", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
-      vim.keymap.set("n", "<leader>ha", function() harpoon:list():append() end)
-      vim.keymap.set("n", "<leader>1", function() harpoon:list():select(1) end)
-      vim.keymap.set("n", "<leader>2", function() harpoon:list():select(2) end)
-      vim.keymap.set("n", "<leader>3", function() harpoon:list():select(3) end)
-      vim.keymap.set("n", "<leader>4", function() harpoon:list():select(4) end)
-      vim.keymap.set("n", "<leader>5", function() harpoon:list():select(5) end)
-      vim.keymap.set("n", "<leader>hp", function() harpoon:list():prev({ ui_nav_wrap = true }) end)
-      vim.keymap.set("n", "<leader>hn", function() harpoon:list():next({ ui_nav_wrap = true }) end)
+      vim.keymap.set("n", "<leader>hs", function()
+        harpoon.ui:toggle_quick_menu(harpoon:list())
+      end)
+      vim.keymap.set("n", "<leader>ha", function()
+        harpoon:list():append()
+      end)
+      vim.keymap.set("n", "<leader>1", function()
+        harpoon:list():select(1)
+      end)
+      vim.keymap.set("n", "<leader>2", function()
+        harpoon:list():select(2)
+      end)
+      vim.keymap.set("n", "<leader>3", function()
+        harpoon:list():select(3)
+      end)
+      vim.keymap.set("n", "<leader>4", function()
+        harpoon:list():select(4)
+      end)
+      vim.keymap.set("n", "<leader>5", function()
+        harpoon:list():select(5)
+      end)
+      vim.keymap.set("n", "<leader>hp", function()
+        harpoon:list():prev({ ui_nav_wrap = true })
+      end)
+      vim.keymap.set("n", "<leader>hn", function()
+        harpoon:list():next({ ui_nav_wrap = true })
+      end)
     end,
     dependencies = { "nvim-lua/plenary.nvim" },
   },
 
+  {
+    "stevearc/conform.nvim",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      local conform = require("conform")
+
+      conform.setup({
+        formatters_by_ft = {
+          lua = { "stylua" },
+          go = { "goimports" },
+          javascript = { "prettierd" },
+          javascriptreact = { "prettierd" },
+          typescript = { "prettierd" },
+          typescriptreact = { "prettierd" },
+          scss = { "prettierd" },
+          less = { "prettierd" },
+          html = { "prettierd" },
+          json = { "prettierd" },
+          jsonc = { "prettierd" },
+          yaml = { "prettierd" },
+          markdown = { "prettierd" },
+          bash = { "shfmt" },
+          sh = { "shfmt" },
+        },
+        format_on_save = {
+          lsp_fallback = true,
+          timeout_ms = 500,
+        },
+      })
+
+      vim.keymap.set({ "n", "v" }, "<leader>qf", function()
+        conform.format({
+          lsp_fallback = true,
+          async = false,
+          timeout_ms = 500,
+        })
+      end)
+    end,
+  },
+
+  {
+    "mfussenegger/nvim-lint",
+    event = { "BufReadPre", "BufNewFile" },
+    config = function()
+      local lint = require("lint")
+
+      lint.linters_by_ft = {
+        lua = { "luacheck" },
+        go = { "golangcilint" },
+        javascript = { "eslint_d" },
+        javascriptreact = { "eslint_d" },
+        typescript = { "eslint_d" },
+        typescriptreact = { "eslint_d" },
+        bash = { "shellcheck" },
+        sh = { "shellcheck" },
+      }
+
+      local lint_augroup = vim.api.nvim_create_augroup("lint", { clear = true })
+
+      vim.api.nvim_create_autocmd(
+        { "BufEnter", "BufWritePost", "InsertLeave" },
+        {
+          group = lint_augroup,
+          callback = function()
+            lint.try_lint()
+          end,
+        }
+      )
+    end,
+  },
 }, {})

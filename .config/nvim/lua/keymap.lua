@@ -2,6 +2,7 @@ vim.keymap.set("n", "<leader>vrc", ":e $MYVIMRC<cr>")
 
 vim.keymap.set("n", "<leader>a", "<C-^>")
 vim.keymap.set("n", "<leader>cd", ":cd %:p:h<cr>:pwd<cr>")
+vim.keymap.set("n", "<leader>/", ":noh<cr>")
 vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("v", "<", "<gv")
 -- vim.keymap.set("n", "<C-j>", "<C-W>j")

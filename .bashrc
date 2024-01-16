@@ -20,6 +20,7 @@ alias sl="ls"
 alias cd..="cd .."
 alias ..="cd .."
 alias xo="xdg-open"
+alias k="kubectl"
 
 alias mpv="mpv --sub-paths=\"Subs\""
 
