@@ -10,26 +10,6 @@ exec "set listchars=tab:>-,trail:\uBB,nbsp:~"
 
 lua require('set')
 
-colorscheme nord
-
-" Return to last edit position when opening files
-autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
-
-" diff current buffer with corresponding file on disk
-function! s:DiffSaved()
-  let filetype=&ft
-  diffthis
-  vnew | r # | normal! 1Gdd
-  diffthis
-  exe "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . filetype
-endfunction
-com! DiffSaved call s:DiffSaved()
-
-com! FormatXML :%!python3 -c "import xml.dom.minidom, sys; print(xml.dom.minidom.parse(sys.stdin).toprettyxml())"
-
 " 'fix' typos
 command! Q :q
 command! Qa :qall

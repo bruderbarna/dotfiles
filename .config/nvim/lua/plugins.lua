@@ -25,6 +25,20 @@ require("lazy").setup({
   -- Detect tabstop and shiftwidth automatically
   "tpope/vim-sleuth",
 
+  "tpope/vim-repeat",
+
+  {
+    "tpope/vim-unimpaired",
+    config = function()
+      vim.cmd("nmap é [")
+      vim.cmd("nmap é [")
+      vim.cmd("nmap é [")
+      vim.cmd("nmap á ]")
+      vim.cmd("nmap á ]")
+      vim.cmd("nmap á ]")
+    end,
+  },
+
   -- NOTE: This is where your plugins related to LSP can be installed.
   --  The configuration is done below. Search for lspconfig to find it below.
   {
@@ -50,14 +64,11 @@ require("lazy").setup({
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
       "L3MON4D3/LuaSnip",
-      "saadparwaiz1/cmp_luasnip",
 
       -- Adds LSP completion capabilities
       "hrsh7th/cmp-nvim-lsp",
       "hrsh7th/cmp-path",
-
-      -- Adds a number of user-friendly snippets
-      "rafamadriz/friendly-snippets",
+      "hrsh7th/cmp-buffer",
     },
   },
 
@@ -171,7 +182,6 @@ require("lazy").setup({
   {
     "pmizio/typescript-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    opts = {},
   },
 
   "vim-scripts/ReplaceWithRegister",
@@ -182,13 +192,41 @@ require("lazy").setup({
       vim.g.loaded_netrw = 1
       vim.g.loaded_netrwPlugin = 1
 
+      local HEIGHT_RATIO = 0.8
+      local WIDTH_RATIO = 0.5
+
       require("nvim-tree").setup({
         sort = {
           sorter = "case_sensitive",
         },
         view = {
-          width = 30,
+          relativenumber = true,
+          float = {
+            enable = true,
+            open_win_config = function()
+              local screen_w = vim.opt.columns:get()
+              local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
+              local window_w = screen_w * WIDTH_RATIO
+              local window_h = screen_h * HEIGHT_RATIO
+              local window_w_int = math.floor(window_w)
+              local window_h_int = math.floor(window_h)
+              local center_x = (screen_w - window_w) / 2
+              local center_y = ((vim.opt.lines:get() - window_h) / 2)
+                - vim.opt.cmdheight:get()
+              return {
+                border = "rounded",
+                relative = "editor",
+                row = center_y,
+                col = center_x,
+                width = window_w_int,
+                height = window_h_int,
+              }
+            end,
+          },
         },
+        width = function()
+          return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
+        end,
         renderer = {
           group_empty = true,
         },
@@ -200,7 +238,16 @@ require("lazy").setup({
   },
 
   "nvim-tree/nvim-web-devicons",
-  "shaunsingh/nord.nvim",
+
+  -- terafox?
+  { "EdenEast/nightfox.nvim" },
+
+  {
+    "andersevenrud/nordic.nvim",
+    config = function()
+      vim.cmd([[colorscheme nordic]])
+    end,
+  },
 
   {
     "folke/trouble.nvim",
