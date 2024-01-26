@@ -42,3 +42,5 @@ vim.o.breakindent = true
 vim.o.undofile = true
 vim.wo.signcolumn = "yes"
 vim.o.completeopt = "menuone,noselect"
+
+vim.opt.matchpairs:append("<:>")

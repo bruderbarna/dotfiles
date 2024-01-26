@@ -37,3 +37,5 @@ vim.keymap.set(
   vim.diagnostic.setloclist,
   { desc = "Open diagnostics list" }
 )
+
+vim.keymap.set("x", "p", "P")

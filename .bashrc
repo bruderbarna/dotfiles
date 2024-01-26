@@ -25,25 +25,28 @@ alias k="kubectl"
 # alias mpv="mpv --sub-paths=\"Subs\""
 
 # Git prompt
-GIT_PROMPT_ONLY_IN_REPO=0
-GIT_PROMPT_THEME=Single_line_Minimalist
-GIT_PROMPT_SHOW_UNTRACKED_FILES=no
-source ~/dotfiles/bashgitprompt/gitprompt.sh
+export GIT_PROMPT_ONLY_IN_REPO=0
+export GIT_PROMPT_THEME=Single_line_Minimalist
+export GIT_PROMPT_SHOW_UNTRACKED_FILES=no
+source $HOME/dotfiles/bashgitprompt/gitprompt.sh
 
 # Environment variables
 export PATH=$PATH:$HOME/bin
 export PATH=$PATH:$HOME/go/bin
+export PATH=$PATH:$HOME/dotfiles/scripts
 export PATH=$PATH:$HOME/.local/share/gem/ruby/3.0.0/bin
 export PATH=$PATH:$HOME/.local/bin
+export PATH=$PATH:$HOME/Android/Sdk/platform-tools
+export PATH=$PATH:$HOME/Android/Sdk/tools
+export PATH=$PATH:$HOME/Android/Sdk/cmdline-tools/latest/bin
 export CHROME_BIN="/usr/bin/google-chrome-stable"
+export BROWSER="$CHROME_BIN"
 export EDITOR=vim
 export VISUAL=vim
-export BROWSER="$CHROME_BIN"
-export JAVA_HOME="/usr/lib/jvm/java-8-openjdk/jre"
-export CDPATH=.:/home/barna/work
+export JAVA_HOME="/usr/lib/jvm/java-17-openjdk"
 export PKG_CONFIG_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
 
-export SLS_DEBUG=*
+export ANDROID_HOME=$HOME/Android/Sdk
 
 # load nvm & setup it's path
 export NVM_DIR="$HOME/.nvm"
@@ -53,3 +56,5 @@ export NVM_DIR="$HOME/.nvm"
 if [ -f ~/.fzf.bash ]; then
 	source ~/.fzf.bash
 fi
+
+. "$HOME/.cargo/env"
