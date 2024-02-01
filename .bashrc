@@ -57,4 +57,4 @@ if [ -f ~/.fzf.bash ]; then
 	source ~/.fzf.bash
 fi
 
-. "$HOME/.cargo/env"
+source /home/barna/.config/op/plugins.sh

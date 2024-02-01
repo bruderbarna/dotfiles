@@ -220,7 +220,6 @@ require("lazy").setup({
 
           -- custom mappings
           vim.keymap.set("n", "cd", api.tree.change_root_to_node, opts("Up"))
-          vim.keymap.set("n", "?", api.tree.toggle_help, opts("Help"))
         end,
       })
 
