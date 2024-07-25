@@ -74,7 +74,33 @@ require("mason-lspconfig").setup()
 local servers = {
   gopls = {},
   jsonls = {},
-
+  tsserver = {},
+  yamlls = {
+    yaml = {
+      customTags = {
+        "!Equals sequence",
+        "!FindInMap sequence",
+        "!GetAtt",
+        "!GetAZs",
+        "!ImportValue",
+        "!Join sequence",
+        "!Ref",
+        "!Select sequence",
+        "!Split sequence",
+        "!Sub",
+        "'Fn::Equals' sequence",
+        "'Fn::FindInMap' sequence",
+        "'Fn::GetAtt'",
+        "'Fn::GetAZs'",
+        "'Fn::ImportValue'",
+        "'Fn::Join' sequence",
+        "'Fn::Ref'",
+        "'Fn::Select' sequence",
+        "'Fn::Split' sequence",
+        "'Fn::Sub'",
+      },
+    },
+  },
   lua_ls = {
     Lua = {
       workspace = { checkThirdParty = false },
@@ -106,10 +132,14 @@ mason_lspconfig.setup_handlers({
       on_attach = on_attach,
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
+      flags = {
+        allow_incremental_sync = false,
+        debounce_text_changes = 100,
+      },
     })
   end,
 })
 
-require("typescript-tools").setup({
-  on_attach = on_attach,
-})
+-- require("typescript-tools").setup({
+--   on_attach = on_attach,
+-- })
