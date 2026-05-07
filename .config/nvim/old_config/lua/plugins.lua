@@ -11,6 +11,56 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- Enable the following language servers
+--  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
+--
+--  Add any additional override configuration in the following tables. They will be passed to
+--  the `settings` field of the server config. You must look up that documentation yourself.
+--
+--  If you want to override the default filetypes that your language server will attach to you can
+--  define the property 'filetypes' to the map in question.
+local servers = {
+  gopls = {},
+  jsonls = {},
+  -- ts_ls = {},
+
+  yamlls = {
+    yaml = {
+      customTags = {
+        "!Equals sequence",
+        "!FindInMap sequence",
+        "!GetAtt",
+        "!GetAZs",
+        "!ImportValue",
+        "!Join sequence",
+        "!Ref",
+        "!Select sequence",
+        "!Split sequence",
+        "!Sub",
+        "'Fn::Equals' sequence",
+        "'Fn::FindInMap' sequence",
+        "'Fn::GetAtt'",
+        "'Fn::GetAZs'",
+        "'Fn::ImportValue'",
+        "'Fn::Join' sequence",
+        "'Fn::Ref'",
+        "'Fn::Select' sequence",
+        "'Fn::Split' sequence",
+        "'Fn::Sub'",
+      },
+    },
+  },
+
+  lua_ls = {
+    Lua = {
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
+      -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+      diagnostics = { disable = { "missing-fields" } },
+    },
+  },
+}
+
 require("lazy").setup({
   -- NOTE: First, some plugins that don"t require any configuration
 
@@ -45,17 +95,24 @@ require("lazy").setup({
     -- LSP Configuration & Plugins
     "neovim/nvim-lspconfig",
     dependencies = {
-      -- Automatically install LSPs to stdpath for neovim
-      { "williamboman/mason.nvim", config = true },
-      "williamboman/mason-lspconfig.nvim",
+      {
+        "williamboman/mason-lspconfig.nvim",
+        opts = {
+          ensure_installed = vim.tbl_keys(servers),
+        },
+        dependencies = {
+          { "mason-org/mason.nvim", config = true },
+        },
+      },
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require("fidget").setup({})`
       { "j-hui/fidget.nvim", opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
-      "folke/neodev.nvim",
+      { "folke/neodev.nvim", opts = {} },
     },
+    config = function() end,
   },
 
   {
@@ -230,15 +287,22 @@ require("lazy").setup({
 
   "nvim-tree/nvim-web-devicons",
 
-  -- terafox?
-  { "EdenEast/nightfox.nvim" },
-
   {
     "andersevenrud/nordic.nvim",
+  },
+  { "EdenEast/nightfox.nvim" },
+  "folke/tokyonight.nvim",
+  "rebelot/kanagawa.nvim",
+  {
+    "catppuccin/nvim",
     config = function()
-      vim.cmd([[colorscheme nordic]])
+      vim.cmd([[colorscheme catppuccin-frappe]])
     end,
   },
+  "rose-pine/neovim",
+  "sainnhe/gruvbox-material",
+  "sainnhe/sonokai",
+  "shaunsingh/nord.nvim",
 
   {
     "folke/trouble.nvim",
@@ -277,46 +341,6 @@ require("lazy").setup({
   },
 
   {
-    "ThePrimeagen/harpoon",
-    lazy = false,
-    branch = "harpoon2",
-    config = function()
-      local harpoon = require("harpoon")
-
-      harpoon:setup()
-
-      vim.keymap.set("n", "<leader>hs", function()
-        harpoon.ui:toggle_quick_menu(harpoon:list())
-      end)
-      vim.keymap.set("n", "<leader>ha", function()
-        harpoon:list():append()
-      end)
-      vim.keymap.set("n", "<leader>1", function()
-        harpoon:list():select(1)
-      end)
-      vim.keymap.set("n", "<leader>2", function()
-        harpoon:list():select(2)
-      end)
-      vim.keymap.set("n", "<leader>3", function()
-        harpoon:list():select(3)
-      end)
-      vim.keymap.set("n", "<leader>4", function()
-        harpoon:list():select(4)
-      end)
-      vim.keymap.set("n", "<leader>5", function()
-        harpoon:list():select(5)
-      end)
-      vim.keymap.set("n", "<leader>hp", function()
-        harpoon:list():prev({ ui_nav_wrap = true })
-      end)
-      vim.keymap.set("n", "<leader>hn", function()
-        harpoon:list():next({ ui_nav_wrap = true })
-      end)
-    end,
-    dependencies = { "nvim-lua/plenary.nvim" },
-  },
-
-  {
     "stevearc/conform.nvim",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
@@ -342,7 +366,7 @@ require("lazy").setup({
         },
         format_on_save = {
           lsp_fallback = true,
-          timeout_ms = 500,
+          timeout_ms = 1500,
         },
       })
 
@@ -380,10 +404,16 @@ require("lazy").setup({
         {
           group = lint_augroup,
           callback = function()
-            lint.try_lint()
+            local get_clients = vim.lsp.get_clients
+              or vim.lsp.get_active_clients
+            local client = get_clients({ bufnr = 0 })[1] or {}
+            lint.try_lint(nil, { cwd = client.root_dir })
+            -- lint.try_lint()
           end,
         }
       )
     end,
   },
+
+  -- "github/copilot.vim",
 }, {})

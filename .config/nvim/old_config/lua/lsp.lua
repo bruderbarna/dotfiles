@@ -58,61 +58,7 @@ local on_attach = function(_, bufnr)
   end, { desc = "Format current buffer with LSP" })
 end
 
--- mason-lspconfig requires that these setup functions are called in this order
--- before setting up the servers.
-require("mason").setup()
-require("mason-lspconfig").setup()
-
--- Enable the following language servers
---  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
---
---  Add any additional override configuration in the following tables. They will be passed to
---  the `settings` field of the server config. You must look up that documentation yourself.
---
---  If you want to override the default filetypes that your language server will attach to you can
---  define the property 'filetypes' to the map in question.
-local servers = {
-  gopls = {},
-  jsonls = {},
-  tsserver = {},
-  yamlls = {
-    yaml = {
-      customTags = {
-        "!Equals sequence",
-        "!FindInMap sequence",
-        "!GetAtt",
-        "!GetAZs",
-        "!ImportValue",
-        "!Join sequence",
-        "!Ref",
-        "!Select sequence",
-        "!Split sequence",
-        "!Sub",
-        "'Fn::Equals' sequence",
-        "'Fn::FindInMap' sequence",
-        "'Fn::GetAtt'",
-        "'Fn::GetAZs'",
-        "'Fn::ImportValue'",
-        "'Fn::Join' sequence",
-        "'Fn::Ref'",
-        "'Fn::Select' sequence",
-        "'Fn::Split' sequence",
-        "'Fn::Sub'",
-      },
-    },
-  },
-  lua_ls = {
-    Lua = {
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-      -- NOTE: toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-      diagnostics = { disable = { "missing-fields" } },
-    },
-  },
-}
-
--- Setup neovim lua configuration
-require("neodev").setup()
+on_attach(1, 1)
 
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
