@@ -1,0 +1,23 @@
+[alias]
+	s = status
+	a = add
+	c = commit
+	l = "!git log --graph"
+	ch = checkout
+	d = "!git diff"
+	dlc = "!git diff @~1 @"
+
+[user]
+	email = bruder.barna@flexboxapp.com
+	name = Bruder Barna
+
+[core]
+	excludesfile = ~/.config/git/ignore
+[push]
+	autoSetupRemote = true
+[init]
+	defaultBranch = main
+[credential "https://msface.visualstudio.com"]
+	username = pat
+	helper =
+	helper = "!f() { test \"$1\" = get && echo \"password=REDACTED\"; }; f"

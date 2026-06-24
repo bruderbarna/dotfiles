@@ -1,0 +1,48 @@
+# Claude Code
+**/.claude/settings.local.json
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+.Trash-*
+.nfs*
+
+# Editors — vim/neovim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Editors — VSCode
+.vscode/
+!.vscode/extensions.json
+
+# Editors — JetBrains
+.idea/
+*.iml
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime / OS junk
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Node
+node_modules/
+
+# Build outputs
+dist/
+build/
+out/
+*.o
+*.a
+*.so

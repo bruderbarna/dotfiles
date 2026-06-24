@@ -81,40 +81,5 @@ esac
 
 export DOCKER_BUILDKIT=1
 
-# load nvm & setup it's path
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # load nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # load nvm bash_completion
-
-# lazy lode nvm instead of through oh-my-zsh to reduce load by 50%
-# lazy-nvm() {
-# 	unset -f nvm node npm npx pnpm
-# 	export NVM_DIR="$HOME/.nvm"
-# 	[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
-# 	[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
-# }
-#
-# nvm() {
-# 	lazy-nvm
-# 	nvm $@
-# }
-#
-# node() {
-# 	lazy-nvm
-# 	node $@
-# }
-#
-# npm() {
-# 	lazy-nvm
-# 	npm $@
-# }
-#
-# npx() {
-# 	lazy-nvm
-# 	npx $@
-# }
-#
-# pnpm() {
-# 	lazy-nvm
-# 	pnpm $@
-# }
+# fnm (node version manager)
+eval "$(fnm env --use-on-cd --shell bash)"

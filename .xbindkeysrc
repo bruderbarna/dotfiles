@@ -1,0 +1,105 @@
+# For the benefit of emacs users: -*- shell-script -*-
+###########################
+# xbindkeys configuration #
+###########################
+#
+# Version: 1.8.7
+#
+# If you edit this file, do not forget to uncomment any lines
+# that you change.
+# The pound(#) symbol may be used anywhere for comments.
+#
+# To specify a key, you can use 'xbindkeys --key' or
+# 'xbindkeys --multikey' and put one of the two lines in this file.
+#
+# The format of a command line is:
+#    "command to start"
+#       associated key
+#
+#
+# A list of keys is in /usr/include/X11/keysym.h and in
+# /usr/include/X11/keysymdef.h
+# The XK_ is not needed.
+#
+# List of modifier:
+#   Release, Control, Shift, Mod1 (Alt), Mod2 (NumLock),
+#   Mod3 (CapsLock), Mod4, Mod5 (Scroll).
+#
+
+# The release modifier is not a standard X modifier, but you can
+# use it if you want to catch release events instead of press events
+
+# By defaults, xbindkeys does not pay attention with the modifiers
+# NumLock, CapsLock and ScrollLock.
+# Uncomment the lines above if you want to pay attention to them.
+
+#keystate_numlock = enable
+#keystate_capslock = enable
+#keystate_scrolllock= enable
+
+"screentogimp"
+    m:0x9 + c:42
+    Shift+Alt + g
+
+"screentofilenamedmenu"
+    m:0x9 + c:41
+    Shift+Alt + f
+
+"maim -s --format png /dev/stdout | xclip -selection clipboard -t image/png -i"
+    m:0x9 + c:39
+    Shift+Alt + s
+
+"cycle-audio-output"
+    m:0x9 + c:31
+    Shift+Alt + i
+
+"chrome"
+    m:0x40 + c:10
+    Mod4 + 1
+
+# "wmctrl -x -a 'youtube music desktop app'"
+#     m:0x40 + c:11
+#     Mod4 + 2
+"youtube-music-desktop-app"
+    m:0x40 + c:11
+    Mod4 + 2
+
+"slack"
+    m:0x40 + c:12
+    Mod4 + 3
+
+"dm-tool switch-to-greeter"
+    m:0x40 + c:46
+    Mod4 + l
+
+"playerctl next"
+    m:0x9 + c:57
+    Shift+Alt + n
+
+"playerctl play-pause"
+    m:0x9 + c:33
+    Shift+Alt + p
+
+"playerctl previous"
+    m:0x9 + c:56
+    Shift+Alt + b
+
+"exo-open --launch TerminalEmulator"
+    m:0x9 + c:36
+    Shift+Alt + Return
+
+"exo-open --launch FileManager"
+    m:0x40 + c:26
+    Mod4 + e
+
+"xfce4-popup-whiskermenu"
+    m:0x40 + c:24
+    Mod4 + q
+
+"/home/barna/bin/move-to-next-monitor"
+    m:0x40 + c:58
+    Mod4 + m
+
+##################################
+# End of xbindkeys configuration #
+##################################
