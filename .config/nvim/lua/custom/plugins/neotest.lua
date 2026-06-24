@@ -1,0 +1,21 @@
+-- -- neotest dependencies
+-- vim.pack.add { 'https://github.com/nvim-lua/plenary.nvim' }
+-- vim.pack.add { 'https://github.com/antoinemadec/FixCursorHold.nvim' }
+-- vim.pack.add { 'https://github.com/nvim-neotest/nvim-nio' }
+--
+-- -- adapters
+-- vim.pack.add { 'https://github.com/marilari88/neotest-vitest' }
+--
+-- -- neotest
+-- vim.pack.add { 'https://github.com/nvim-neotest/neotest' }
+--
+-- require('neotest').setup {
+--   adapters = {
+--     require 'neotest-vitest' {
+--       -- Filter directories when searching for test files. Useful in large projects (see Filter directories notes).
+--       filter_dir = function(name)
+--         return name ~= 'node_modules'
+--       end,
+--     },
+--   },
+-- }
