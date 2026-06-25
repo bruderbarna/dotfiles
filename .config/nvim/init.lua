@@ -131,6 +131,15 @@ do
 
   -- Enable undo/redo changes even after closing and reopening a file
   vim.o.undofile = true
+  vim.o.undodir = vim.env.HOME .. '/nvim-undo//'
+
+  -- Backup files
+  vim.o.backup = true
+  vim.o.backupdir = vim.env.HOME .. '/nvim-backup//'
+
+  -- Swap files
+  vim.o.swapfile = true
+  vim.o.directory = vim.env.HOME .. '/nvim-swap//'
 
   -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
   vim.o.ignorecase = true
@@ -877,6 +886,9 @@ do
   require('conform').setup {
     notify_on_error = true,
     format_on_save = function(bufnr)
+      if vim.b[bufnr].disable_format_on_save then
+        return nil
+      end
       -- Disable "format_on_save lsp_fallback" for languages that don't
       -- have a well standardized coding style. You can add additional
       -- languages here or re-enable it for the disabled ones.
@@ -923,6 +935,15 @@ do
   -- vim.keymap.set({ 'n', 'v' }, '<leader>f', function()
   --   require('conform').format { async = true }
   -- end, { desc = '[F]ormat buffer' })
+
+  vim.api.nvim_create_user_command('WriteNoFormat', function()
+    vim.b.disable_format_on_save = true
+    local ok, err = pcall(vim.cmd, 'write')
+    vim.b.disable_format_on_save = false
+    if not ok then error(err) end
+  end, { desc = 'Save file without running conform formatters' })
+
+  vim.keymap.set('n', '<leader>W', '<cmd>WriteNoFormat<cr>', { desc = 'Save without formatting' })
 end
 
 -- ============================================================
