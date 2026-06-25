@@ -67,6 +67,7 @@ Run these from a new shell after Homebrew is set up (so `~/.local/bin` etc. exis
 ln -sf ~/dotfiles/.zshrc ~/.zshrc
 ln -sf ~/dotfiles/.bash_profile ~/.bash_profile
 ln -sf ~/dotfiles/.bashrc ~/.bashrc
+ln -sf ~/dotfiles/.zsh_plugins.txt ~/.zsh_plugins.txt
 
 # Git
 ln -sf ~/dotfiles/.gitconfig ~/.gitconfig
@@ -91,7 +92,29 @@ ln -sf ~/dotfiles/.config/nvim ~/.config/nvim
 
 ---
 
-## 7. Node (fnm)
+## 7. zsh plugins (antidote)
+
+`brew bundle` installs antidote on macOS. On Arch Linux, install it from AUR:
+
+```sh
+yay -S zsh-antidote
+```
+
+The `.zsh_plugins.txt` symlink (done in step 6) is all that's needed — antidote loads and caches plugins automatically on first shell start. Installed plugins:
+
+- **zsh-autosuggestions** — fish-style inline suggestions from history
+- **zsh-syntax-highlighting** — command highlighting as you type
+- **woefe/git-prompt.zsh** — git-aware prompt (zsh port of bash-git-prompt), styled like Single_line_Minimalist
+
+To update all plugins later:
+
+```sh
+antidote update
+```
+
+---
+
+## 8. Node (fnm)
 
 fnm is installed via Brew. Set up node 22 and reinstall globals:
 
@@ -128,7 +151,7 @@ fnm respects `.nvmrc` and `.node-version` files automatically via `--use-on-cd` 
 
 ---
 
-## 8. Rust
+## 9. Rust
 
 ```sh
 rustup-init
@@ -138,7 +161,7 @@ Follow prompts, then open a new shell. Cargo is at `~/.cargo/bin` (sourced by `.
 
 ---
 
-## 9. tmux plugins
+## 10. tmux plugins
 
 First, bootstrap TPM itself:
 
@@ -158,13 +181,13 @@ The clipboard binding in `.tmux.conf` detects the OS automatically — `pbcopy` 
 
 ---
 
-## 10. Neovim
+## 11. Neovim
 
 Launch `nvim` — lazy.nvim will auto-bootstrap and install all plugins on first run. Tree-sitter parsers and LSP servers install themselves on first open of relevant files.
 
 ---
 
-## 11. Cloud / infra credentials
+## 12. Cloud / infra credentials
 
 These dirs transfer as-is — just copy them over from the old machine or re-auth:
 
@@ -191,7 +214,7 @@ cp -r ~/.terraform.d ~/
 
 ---
 
-## 12. Secrets file
+## 13. Secrets file
 
 Create `~/.secrets` and populate it. `.zshrc` sources it automatically. Minimum:
 
@@ -202,7 +225,7 @@ export OPENAI_API_KEY=...
 
 ---
 
-## 13. YouTube Music desktop app
+## 14. YouTube Music desktop app
 
 No brew cask exists for th-ch/youtube-music. Install manually:
 
@@ -214,7 +237,7 @@ This is the actively maintained app (not to be confused with deprecated forks). 
 
 ---
 
-## 14. Apps to sign into manually
+## 15. Apps to sign into manually
 
 - **1Password** — sign in first, then it fills credentials for everything else
 - **Chrome** — sign in to sync bookmarks, extensions, passwords
@@ -223,7 +246,7 @@ This is the actively maintained app (not to be confused with deprecated forks). 
 
 ---
 
-## 14. macOS system settings worth changing
+## 16. macOS system settings worth changing
 
 ```
 System Settings → Keyboard → Key repeat rate → Fast
@@ -241,7 +264,7 @@ defaults write NSGlobalDomain ApplePressAndHoldEnabled -bool false
 
 ---
 
-## 15. Hungarian keyboard layout
+## 17. Hungarian keyboard layout
 
 ### Adding the layout
 
@@ -286,7 +309,7 @@ Ukelele lets you take the macOS Hungarian layout as a base and remap any key to 
 
 ---
 
-## 16. What's not in this repo (restore manually)
+## 18. What's not in this repo (restore manually)
 
 - `~/.ssh/` — private keys, don't commit, copy securely or generate new ones
 - `~/.aws/`, `~/.azure/`, `~/.kube/` — credentials
@@ -297,7 +320,7 @@ Ukelele lets you take the macOS Hungarian layout as a base and remap any key to 
 
 ---
 
-## 17. Optional extras (do if you want them)
+## 19. Optional extras (do if you want them)
 
 ### 1Password SSH agent
 Store SSH keys in 1Password and have it act as your SSH agent — no key files on disk.

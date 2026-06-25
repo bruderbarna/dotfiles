@@ -116,24 +116,69 @@ export BROWSER="$CHROME_BIN"
 [[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 
 # ----------------------------
+# antidote
+# ----------------------------
+
+if [[ "$OS" == "Darwin" ]]; then
+  _antidote_path="$(brew --prefix)/opt/antidote/share/antidote/antidote.zsh"
+else
+  _antidote_path="/usr/share/zsh-antidote/antidote.zsh"
+fi
+
+if [[ -f "$_antidote_path" ]]; then
+  source "$_antidote_path"
+  antidote load ~/.zsh_plugins.txt
+else
+  _warn_missing antidote
+fi
+unset _antidote_path
+
+# ----------------------------
+# Prompt
+# ----------------------------
+
+setopt PROMPT_SUBST
+
+ZSH_THEME_GIT_PROMPT_PREFIX=" ["
+ZSH_THEME_GIT_PROMPT_SUFFIX="]"
+ZSH_THEME_GIT_PROMPT_SEPARATOR=" "
+ZSH_THEME_GIT_PROMPT_BRANCH="%F{cyan}"
+ZSH_THEME_GIT_PROMPT_STAGED="%F{red}●%f"
+ZSH_THEME_GIT_PROMPT_CONFLICTS="%F{red}✖%f"
+ZSH_THEME_GIT_PROMPT_CHANGED="%F{blue}✚%f"
+ZSH_THEME_GIT_PROMPT_BEHIND="%F{cyan}↓%f"
+ZSH_THEME_GIT_PROMPT_AHEAD="%F{cyan}↑%f"
+ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{cyan}…%f"
+ZSH_THEME_GIT_PROMPT_STASHED="%F{blue}⚑%f"
+ZSH_THEME_GIT_PROMPT_CLEAN="%F{green}✔%f"
+
+PROMPT='%(?:%F{green}✔%f:%F{red}✘%f) %F{white}%D{%H:%M:%S}%f %F{cyan}%~%f$(gitprompt) %# '
+
+# ----------------------------
 # fnm
 # ----------------------------
 
-eval "$(fnm env --use-on-cd --shell zsh)"
+if command -v fnm &>/dev/null; then
+  eval "$(fnm env --use-on-cd --shell zsh)"
+else
+  _warn_missing fnm
+fi
 
 # ----------------------------
 # direnv
 # ----------------------------
 
-eval "$(direnv hook zsh)"
+if command -v direnv &>/dev/null; then
+  eval "$(direnv hook zsh)"
+else
+  _warn_missing direnv
+fi
 
 # ----------------------------
 # fzf
 # ----------------------------
 
-if ! command -v fzf &>/dev/null; then
-  echo "WARNING: fzf is not installed" >&2
-else
+if command -v fzf &>/dev/null; then
   if [[ "$OS" == "Darwin" ]]; then
     source "$(brew --prefix)/opt/fzf/shell/key-bindings.zsh" 2>/dev/null || true
     source "$(brew --prefix)/opt/fzf/shell/completion.zsh" 2>/dev/null || true
@@ -141,15 +186,31 @@ else
     source /usr/share/fzf/key-bindings.zsh 2>/dev/null || true
     source /usr/share/fzf/completion.zsh 2>/dev/null || true
   fi
+else
+  _warn_missing fzf
 fi
 
 # ----------------------------
 # Completions
 # ----------------------------
 
-command -v kubectl >/dev/null && source <(kubectl completion zsh)
-command -v terraform >/dev/null && complete -o nospace -C terraform terraform
-command -v flyctl >/dev/null && source <(flyctl completion zsh)
+autoload -U +X bashcompinit && bashcompinit
+
+if command -v kubectl &>/dev/null; then
+  source <(kubectl completion zsh)
+  compdef k=kubectl
+fi
+
+if command -v terraform &>/dev/null; then
+  complete -o nospace -C terraform terraform
+  compdef tf=terraform
+fi
+
+if command -v flyctl &>/dev/null; then
+  source <(flyctl completion zsh)
+fi
+
+compdef d=docker
 
 # ----------------------------
 # Secrets

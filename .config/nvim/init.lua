@@ -862,7 +862,6 @@ do
 
     -- linters
     'eslint_d',
-    'luacheck',
     'shellcheck',
     'tflint',
     'markdownlint',
@@ -940,7 +939,9 @@ do
     vim.b.disable_format_on_save = true
     local ok, err = pcall(vim.cmd, 'write')
     vim.b.disable_format_on_save = false
-    if not ok then error(err) end
+    if not ok then
+      error(err)
+    end
   end, { desc = 'Save file without running conform formatters' })
 
   vim.keymap.set('n', '<leader>W', '<cmd>WriteNoFormat<cr>', { desc = 'Save without formatting' })
