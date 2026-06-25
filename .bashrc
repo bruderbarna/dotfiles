@@ -57,8 +57,11 @@ export ANDROID_HOME="$HOME/Android/Sdk"
 export ANDROID_SDK_HOME="$HOME/Android/Sdk"
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 
-if [ -f ~/.fzf.bash ]; then
-	source ~/.fzf.bash
+if ! command -v fzf &>/dev/null; then
+  echo "WARNING: fzf is not installed" >&2
+else
+  source /usr/share/fzf/key-bindings.bash 2>/dev/null || true
+  source /usr/share/fzf/completion.bash 2>/dev/null || true
 fi
 
 export FLYCTL_INSTALL="/home/barna/.fly"
