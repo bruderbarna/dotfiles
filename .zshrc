@@ -113,6 +113,28 @@ path=(
 export PATH
 
 # ----------------------------
+# Build tool wrappers
+# ----------------------------
+
+mvn() {
+  if [[ -x ./mvnw ]]; then
+    ./mvnw "$@"
+  else
+    printf '\033[1;33m\n  ⚠  WARNING: no ./mvnw — using global mvn\n\033[0m' >&2
+    command mvn "$@"
+  fi
+}
+
+gradle() {
+  if [[ -x ./gradlew ]]; then
+    ./gradlew "$@"
+  else
+    printf '\033[1;33m\n  ⚠  WARNING: no ./gradlew — using global gradle\n\033[0m' >&2
+    command gradle "$@"
+  fi
+}
+
+# ----------------------------
 # Aliases
 # ----------------------------
 

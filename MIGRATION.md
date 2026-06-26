@@ -54,7 +54,7 @@ Then install everything from the Brewfile:
 brew bundle --file=~/dotfiles/Brewfile
 ```
 
-This takes a while. Some casks (JetBrains Toolbox, Docker) will prompt for system permissions — allow them.
+This takes a while. Some casks (e.g. Ghostty) will prompt for system permissions — allow them.
 
 ---
 
@@ -258,7 +258,7 @@ This is the actively maintained app (not to be confused with deprecated forks). 
 - **1Password** — sign in first, then it fills credentials for everything else
 - **Chrome** — sign in to sync bookmarks, extensions, passwords
 - **IntelliJ IDEA** — sign in with your JetBrains account on first launch; Settings Sync restores IDE config automatically
-- **Docker Desktop** — sign in (optional, not required to run containers)
+- **Colima** — no sign-in needed; start the VM once with `colima start`, then the `docker` CLI works as normal. To auto-start on login: `brew services start colima`
 
 ---
 
