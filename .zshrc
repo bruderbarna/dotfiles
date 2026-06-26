@@ -8,6 +8,7 @@ compinit
 zstyle ':completion:*' completer _complete _approximate
 zstyle ':completion:*' max-errors 2 not-numeric
 zstyle ':completion:*' menu select
+zstyle ':completion::complete:*' gain-privileges 1
 
 # ----------------------------
 # History
@@ -17,6 +18,10 @@ HISTFILE=~/.histfile
 HISTSIZE=100000
 SAVEHIST=200000
 
+# ----------------------------
+# Opts
+# ----------------------------
+
 setopt APPEND_HISTORY
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_DUPS
@@ -25,7 +30,21 @@ setopt HIST_FIND_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt EXTENDED_HISTORY
 
+# ----------------------------
+# Keybinds
+# ----------------------------
+
 bindkey -e
+
+[[ -n ${terminfo[khome]} ]] && bindkey "${terminfo[khome]}" beginning-of-line
+[[ -n ${terminfo[kend]}  ]] && bindkey "${terminfo[kend]}"  end-of-line
+[[ -n ${terminfo[kdelete]}  ]] && bindkey "${terminfo[kdelete]}"  delete-char
+
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
+bindkey '^[OH' beginning-of-line
+bindkey '^[OF' end-of-line
+bindkey '^[[3~' delete-char
 
 # ----------------------------
 # OS

@@ -207,9 +207,25 @@ fly auth login
 # Serverless
 serverless login
 
-# Terraform versions
+# Terraform versions (managed by tfswitch — do NOT install terraform via brew)
 cp -r ~/.terraform.versions ~/
 cp -r ~/.terraform.d ~/
+```
+
+After copying, configure tfswitch to symlink into `~/bin` (avoids needing sudo for `/usr/local/bin`):
+
+```sh
+cat > ~/.tfswitch.toml <<'EOF'
+bin = "/Users/$USER/bin/terraform"
+EOF
+```
+
+Then switch to the version you need:
+
+```sh
+tfswitch          # interactive picker
+# or
+tfswitch 1.9.8   # specific version
 ```
 
 ---
