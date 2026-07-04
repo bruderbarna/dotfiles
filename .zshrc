@@ -213,22 +213,24 @@ unset _antidote_path
 # Prompt
 # ----------------------------
 
-setopt PROMPT_SUBST
+# setopt PROMPT_SUBST
 
-ZSH_THEME_GIT_PROMPT_PREFIX=" ["
-ZSH_THEME_GIT_PROMPT_SUFFIX="]"
-ZSH_THEME_GIT_PROMPT_SEPARATOR=" "
-ZSH_THEME_GIT_PROMPT_BRANCH="%F{cyan}"
-ZSH_THEME_GIT_PROMPT_STAGED="%F{red}●%f"
-ZSH_THEME_GIT_PROMPT_CONFLICTS="%F{red}✖%f"
-ZSH_THEME_GIT_PROMPT_CHANGED="%F{blue}✚%f"
-ZSH_THEME_GIT_PROMPT_BEHIND="%F{cyan}↓%f"
-ZSH_THEME_GIT_PROMPT_AHEAD="%F{cyan}↑%f"
-ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{cyan}…%f"
-ZSH_THEME_GIT_PROMPT_STASHED="%F{blue}⚑%f"
-ZSH_THEME_GIT_PROMPT_CLEAN="%F{green}✔%f"
+# ZSH_THEME_GIT_PROMPT_PREFIX=" ["
+# ZSH_THEME_GIT_PROMPT_SUFFIX="]"
+# ZSH_THEME_GIT_PROMPT_SEPARATOR=" "
+# ZSH_THEME_GIT_PROMPT_BRANCH="%F{cyan}"
+# ZSH_THEME_GIT_PROMPT_STAGED="%F{red}●%f"
+# ZSH_THEME_GIT_PROMPT_CONFLICTS="%F{red}✖%f"
+# ZSH_THEME_GIT_PROMPT_CHANGED="%F{blue}✚%f"
+# ZSH_THEME_GIT_PROMPT_BEHIND="%F{cyan}↓%f"
+# ZSH_THEME_GIT_PROMPT_AHEAD="%F{cyan}↑%f"
+# ZSH_THEME_GIT_PROMPT_UNTRACKED="%F{cyan}…%f"
+# ZSH_THEME_GIT_PROMPT_STASHED="%F{blue}⚑%f"
+# ZSH_THEME_GIT_PROMPT_CLEAN="%F{green}✔%f"
 
-PROMPT='%(?:%F{green}✔%f:%F{red}✘%f) %F{white}%D{%H:%M:%S}%f %F{cyan}%~%f$(gitprompt) %# '
+ZSH_GIT_PROMPT_SHOW_STASH=1
+
+PROMPT='%(?:%F{green}✔%f:%F{red}✘%f) %F{white}%D{%H:%M:%S}%f %F{cyan}%~%f $(gitprompt)%# '
 
 # ----------------------------
 # fnm
