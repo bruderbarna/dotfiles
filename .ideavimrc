@@ -1,0 +1,59 @@
+" ~/.ideavimrc — mirrors what's simple to carry over from init.lua
+
+let mapleader = ","
+let maplocalleader = ","
+
+" -- options (mirrors SECTION 1 of init.lua) --
+set number
+set ignorecase
+set smartcase
+set incsearch
+set hlsearch
+set scrolloff=10
+set nowrap
+set clipboard+=unnamed
+set showmode
+
+" IdeaVim extensions, roughly standing in for mini.surround / mini.ai / gitsigns
+set surround
+set commentary
+set argtextobj
+set exchange
+set ideajoin
+set NERDTree
+
+" -- basic keymaps --
+nnoremap <Esc> :nohlsearch<CR>
+
+" window navigation (C-hjkl)
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+
+" keep selection after indent
+vnoremap > >gv
+vnoremap < <gv
+
+" centered half-page scroll / search jumps
+nnoremap <C-u> <C-u>zz
+nnoremap <C-d> <C-d>zz
+nnoremap n nzz
+nnoremap N Nzz
+
+" paste in visual mode without yanking the replaced text
+xnoremap p P
+
+" -- IDE-equivalents for the LSP-ish mappings from init.lua --
+nnoremap gd :action GotoDeclaration<CR>
+nnoremap gi :action GotoImplementation<CR>
+nnoremap gr :action ShowUsages<CR>
+nnoremap gt :action GotoTypeDeclaration<CR>
+nnoremap K :action QuickJavaDoc<CR>
+nnoremap <leader>rn :action RenameElement<CR>
+nnoremap <leader>ca :action ShowIntentionActions<CR>
+nnoremap <leader>e :action ShowErrorDescription<CR>
+nnoremap <leader>q :action ActivateProblemsViewToolWindow<CR>
+nnoremap <leader>s :action FindInPath<CR>
+nnoremap <leader>f :action GotoFile<CR>
+nnoremap <leader>a :action Switcher<CR>

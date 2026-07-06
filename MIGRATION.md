@@ -86,6 +86,9 @@ ln -sf ~/dotfiles/.config/ghostty/themes/catppuccin-frappe.conf ~/.config/ghostt
 # Neovim
 mkdir -p ~/.config
 ln -sf ~/dotfiles/.config/nvim ~/.config/nvim
+
+# IdeaVim (IntelliJ/JetBrains IDEs)
+ln -sf ~/dotfiles/.ideavimrc ~/.ideavimrc
 ```
 
 `.xbindkeysrc` and `.Xresources` are Linux/X11 only — skip on Mac.
