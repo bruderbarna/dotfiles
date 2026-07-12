@@ -2,8 +2,66 @@
 # Completion
 # ----------------------------
 
+autoload -U +X bashcompinit && bashcompinit
+
+# --- docker ---
+docker_installed=false
+command -v docker >/dev/null 2>&1 && docker_installed=true
+
+if $docker_installed; then
+  if [ ! -f "$HOME/.docker/completions/_docker" ]; then
+    if [ ! -f "$HOME/.docker/completions" ]; then
+      mkdir -p "$HOME/.docker/completions"
+    fi
+    docker completion zsh > "$HOME/.docker/completions/_docker"
+  fi
+  FPATH="$HOME/.docker/completions:$FPATH"
+fi
+
+# --- kubectl ---
+kubectl_installed=false
+command -v kubectl >/dev/null 2>&1 && kubectl_installed=true
+
+if $kubectl_installed; then
+  # kubectl completion supports "zsh"
+  if [ ! -f "$HOME/.kubectl/completions/_kubectl" ]; then
+    if [ ! -f "$HOME/.kubectl/completions" ]; then
+      mkdir -p "$HOME/.kubectl/completions"
+    fi
+    kubectl completion zsh > "$HOME/.kubectl/completions/_kubectl"
+  fi
+  FPATH="$HOME/.kubectl/completions:$FPATH"
+fi
+
+# --- terraform ---
+terraform_installed=false
+command -v terraform >/dev/null 2>&1 && terraform_installed=true
+
+if $terraform_installed; then
+  if [ ! -f "$HOME/.terraform/completions/_terraform" ]; then
+    if [ ! -f "$HOME/.terraform/completions" ]; then
+      mkdir -p "$HOME/.terraform/completions"
+    fi
+    terraform completion zsh > "$HOME/.terraform/completions/_terraform"
+  fi
+  FPATH="$HOME/.terraform/completions:$FPATH"
+fi
+
+# --- init zsh completion ---
 autoload -Uz compinit
 compinit
+
+# --- compdefs ---
+if $docker_installed; then
+  compdef d=docker
+fi
+if $kubectl_installed; then
+  compdef k=kubectl
+fi
+# tf compdef already set above, but keeping it here is harmless:
+if $terraform_installed; then
+  compdef tf=terraform
+fi
 
 zstyle ':completion:*' completer _complete _approximate
 zstyle ':completion:*' max-errors 2 not-numeric
@@ -100,13 +158,8 @@ _warn_missing() { echo "WARNING: $1 is not installed" >&2 }
 typeset -U path PATH
 
 path=(
-  "$HOME/bin"
   "$HOME/go/bin"
-  "$HOME/dotfiles/scripts"
-  "$HOME/.local/bin"
-  "$HOME/.local/share/gem/ruby/3.0.0/bin"
-  "$HOME/.fly/bin"
-  "$HOME/.local/share/pnpm"
+
   $path
 )
 
@@ -147,6 +200,7 @@ alias ..='cd ..'
 alias k='kubectl'
 alias d='docker'
 alias tf='terraform'
+alias vim='nvim'
 
 if [[ "$OS" == "Darwin" ]]; then
   alias xo='open'
@@ -164,13 +218,6 @@ export DOCKER_BUILDKIT=1
 
 export EDITOR=vim
 export VISUAL=vim
-
-export ANDROID_HOME="$HOME/Android/Sdk"
-export ANDROID_SDK_HOME="$ANDROID_HOME"
-
-path+=("$ANDROID_HOME/platform-tools")
-
-export FLYCTL_INSTALL="$HOME/.fly"
 
 if [[ "$OS" == "Darwin" ]]; then
   [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -243,16 +290,6 @@ else
 fi
 
 # ----------------------------
-# direnv
-# ----------------------------
-
-if command -v direnv &>/dev/null; then
-  eval "$(direnv hook zsh)"
-else
-  _warn_missing direnv
-fi
-
-# ----------------------------
 # fzf
 # ----------------------------
 
@@ -269,29 +306,49 @@ else
 fi
 
 # ----------------------------
-# Completions
-# ----------------------------
-
-autoload -U +X bashcompinit && bashcompinit
-
-if command -v kubectl &>/dev/null; then
-  source <(kubectl completion zsh)
-  compdef k=kubectl
-fi
-
-if command -v terraform &>/dev/null; then
-  complete -o nospace -C terraform terraform
-  compdef tf=terraform
-fi
-
-if command -v flyctl &>/dev/null; then
-  source <(flyctl completion zsh)
-fi
-
-compdef d=docker
-
-# ----------------------------
 # Secrets
 # ----------------------------
 
 [[ -f ~/.secrets ]] && source ~/.secrets
+
+# ----------------------------
+# Sdkman init
+# ----------------------------
+
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# ----------------------------
+# Sdkman init
+# ----------------------------
+
+export CLOUDSMITH_REPOSITORY=114-aiis_general-d
+
+# ----------------------------
+# Homebrew
+# ----------------------------
+
+# export HOMEBREW_PREFIX=~/.local/Homebrew
+
+
+# ----------------------------
+# fnm
+# ----------------------------
+
+export PATH="/Users/barna.bruder/.local/state/fnm_multishells/24880_1783519281633/bin":$PATH
+export FNM_MULTISHELL_PATH="/Users/barna.bruder/.local/state/fnm_multishells/24880_1783519281633"
+export FNM_VERSION_FILE_STRATEGY="local"
+export FNM_DIR="/Users/barna.bruder/.local/share/fnm"
+export FNM_LOGLEVEL="info"
+export FNM_NODE_DIST_MIRROR="https://nodejs.org/dist"
+export FNM_COREPACK_ENABLED="false"
+export FNM_RESOLVE_ENGINES="true"
+export FNM_ARCH="arm64"
+rehash
+
+# ----------------------------
+# tmux url select
+# ----------------------------
+
+export TMUX_URL_SELECT_CLIP_CMD=pbcopy
+export TMUX_URL_SELECT_OPEN_CMD=open
