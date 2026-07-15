@@ -50,9 +50,11 @@ nnoremap <leader>rn :action RenameElement<CR>
 nnoremap <leader>ca :action ShowIntentionActions<CR>
 nnoremap <leader>e :action ShowErrorDescription<CR>
 nnoremap <leader>q :action ActivateProblemsViewToolWindow<CR>
-nnoremap <leader>s :action FindInPath<CR>
-vnoremap <leader>j :action FindInPath<CR>
-nnoremap <leader>f :action GotoFile<CR>
+nnoremap <leader>s :action Television.Channel.Text<CR>
+vnoremap <leader>s :action Television.Channel.Text<CR>
+nnoremap <leader>j :action Television.Channel.Text<CR>
+vnoremap <leader>j :action Television.Channel.Text<CR>
+nnoremap <leader>f :action Television.Channel.Files<CR>
 nnoremap <leader>a :action Switcher<CR>
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <leader>m :NERDTreeFind<CR>

@@ -13,5 +13,9 @@
 
 [core]
 	excludesfile = ~/.config/git/ignore
+
 [push]
 	autoSetupRemote = true
+
+[pull]
+	ff = only

@@ -47,6 +47,20 @@ if $terraform_installed; then
   FPATH="$HOME/.terraform/completions:$FPATH"
 fi
 
+# --- sesh ---
+sesh_installed=false
+command -v sesh >/dev/null 2>&1 && sesh_installed=true
+
+if $sesh_installed; then
+  if [ ! -f "$HOME/.sesh/completions/_sesh" ]; then
+    if [ ! -f "$HOME/.sesh/completions" ]; then
+      mkdir -p "$HOME/.sesh/completions"
+    fi
+    sesh completion zsh > "$HOME/.sesh/completions/_sesh"
+  fi
+  FPATH="$HOME/.sesh/completions:$FPATH"
+fi
+
 # --- init zsh completion ---
 autoload -Uz compinit
 compinit
@@ -58,7 +72,6 @@ fi
 if $kubectl_installed; then
   compdef k=kubectl
 fi
-# tf compdef already set above, but keeping it here is harmless:
 if $terraform_installed; then
   compdef tf=terraform
 fi
@@ -159,6 +172,8 @@ typeset -U path PATH
 
 path=(
   "$HOME/go/bin"
+  "$HOME/.local/bin"
+  "$HOME/dotfiles/bin"
 
   $path
 )
@@ -216,14 +231,14 @@ fi
 export CLAUDE_CODE_TMUX_TRUECOLOR=1
 export DOCKER_BUILDKIT=1
 
-export EDITOR=vim
-export VISUAL=vim
+export EDITOR=nvim
+export VISUAL=nvim
 
 if [[ "$OS" == "Darwin" ]]; then
   [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
   export JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null)"
-  export CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  export CHROME_BIN="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 else
   export JAVA_HOME="/usr/lib/jvm/default"
   export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig"
@@ -319,17 +334,10 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 
 # ----------------------------
-# Sdkman init
+# cloudsmith
 # ----------------------------
 
 export CLOUDSMITH_REPOSITORY=114-aiis_general-d
-
-# ----------------------------
-# Homebrew
-# ----------------------------
-
-# export HOMEBREW_PREFIX=~/.local/Homebrew
-
 
 # ----------------------------
 # fnm
@@ -352,3 +360,36 @@ rehash
 
 export TMUX_URL_SELECT_CLIP_CMD=pbcopy
 export TMUX_URL_SELECT_OPEN_CMD=open
+
+# ----------------------------
+# zoxide
+# ----------------------------
+
+eval "$(zoxide init zsh)"
+
+# ----------------------------
+# television
+# ----------------------------
+
+source $HOME/.config/television/shell/integration.zsh
+
+# ----------------------------
+# tmux session management
+# ----------------------------
+
+t() {
+  sesh connect "$(
+    sesh list --icons | fzf-tmux -p 80%,70% \
+      --no-sort --ansi --border-label ' sesh ' --prompt '⚡  ' \
+      --header '  ^a all ^t tmux ^g configs ^x zoxide ^d tmux kill ^f find' \
+      --bind 'tab:down,btab:up' \
+      --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list --icons)' \
+      --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t --icons)' \
+      --bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c --icons)' \
+      --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z --icons)' \
+      --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)' \
+      --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list --icons)' \
+      --preview-window 'right:55%' \
+      --preview 'sesh preview {}'
+  )"
+}

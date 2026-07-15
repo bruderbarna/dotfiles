@@ -207,7 +207,6 @@ do
   --  See `:help hlsearch`
   vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
-
   -- Diagnostic Config & Keymaps
   --  See `:help vim.diagnostic.Opts`
   vim.diagnostic.config {
@@ -556,8 +555,8 @@ do
 
   -- See `:help telescope.builtin`
   local builtin = require 'telescope.builtin'
-  vim.keymap.set('n', '<leader>s', builtin.live_grep, { desc = '[S]earch by grep' })
-  vim.keymap.set('n', '<leader>S', function()
+
+  local grep = function()
     require('telescope.builtin').live_grep {
       vimgrep_arguments = {
         'rg',
@@ -570,7 +569,10 @@ do
         '-uu',
       },
     }
-  end)
+  end
+
+  vim.keymap.set('n', '<leader>s', grep, { desc = '[s]earch by grep' })
+  vim.keymap.set('n', '<leader>S', grep, { desc = '[S]earch by grep' })
   vim.keymap.set('n', '<leader>j', '<cmd>lua require("telescope.builtin").grep_string({search = vim.fn.expand("<cword>")})<cr>')
   vim.keymap.set('n', '<leader>f', builtin.git_files)
   vim.keymap.set('n', '<leader>F', '<cmd>lua require("telescope.builtin").find_files({follow = true})<cr>')
@@ -770,7 +772,24 @@ do
 
     yamlls = {
       yaml = {
+        validate = true,
+        completion = true,
+        hover = true,
+
         customTags = {
+          '!And scalar',
+          '!If scalar',
+          '!Not scalar',
+          '!Equals scalar',
+          '!Or scalar',
+          '!FindInMap sequence',
+          '!Base64 scalar',
+          '!Cidr scalar',
+          '!Ref scalar',
+          '!Sub scalar',
+          '!GetAtt scalar',
+          '!reference',
+
           '!Equals sequence',
           '!FindInMap sequence',
           '!GetAtt',
@@ -830,6 +849,12 @@ do
         },
       },
     },
+
+    helm_ls = {
+      filetypes = { 'helm' },
+      cmd = { 'helm_ls', 'serve' },
+      root_markers = { 'Chart.yaml' },
+    },
   }
 
   vim.pack.add {
@@ -853,6 +878,7 @@ do
   vim.list_extend(ensure_installed, {
     -- language servers
     'tsgo',
+    'helm-ls',
 
     -- formatters
     'stylua',
@@ -860,12 +886,14 @@ do
     'prettier',
     'terraform',
     'shfmt',
+    'xmlformatter',
 
     -- linters
     'eslint_d',
     'shellcheck',
     'tflint',
     'markdownlint',
+    'luacheck',
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -892,7 +920,7 @@ do
       -- Disable "format_on_save lsp_fallback" for languages that don't
       -- have a well standardized coding style. You can add additional
       -- languages here or re-enable it for the disabled ones.
-      local disable_filetypes = { c = true, cpp = true }
+      local disable_filetypes = { c = true, cpp = true, xml = true }
       if disable_filetypes[vim.bo[bufnr].filetype] then
         return nil
       else
@@ -903,6 +931,11 @@ do
     end,
     default_format_opts = {
       lsp_format = 'fallback', -- Use external formatters if configured below, otherwise use LSP formatting. Set to `false` to disable LSP formatting entirely.
+    },
+    formatters = {
+      helmfmt = {
+        command = 'helmfmt',
+      },
     },
     -- You can also specify external formatters in here.
     formatters_by_ft = {
@@ -929,6 +962,8 @@ do
       terraform = { 'terraform fmt' },
       bash = { 'shfmt' },
       sh = { 'shfmt' },
+      helm = { 'helmfmt' },
+      xml = { 'xmlformatter' },
     },
   }
 
@@ -1067,6 +1102,7 @@ do
     'vim',
     'vimdoc',
     'yaml',
+    'xml',
   }
 
   require('nvim-treesitter').install(parsers)
