@@ -1,6 +1,2 @@
 .secrets
-.xmonad/xmonad-x86_64-linux
-.xmonad/xmonad.hs
-.xmonad/xmonad.hi
-.xmonad/xmonad.o
-.xmonad/xmonad.errors
+.idea
