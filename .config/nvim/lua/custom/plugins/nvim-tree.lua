@@ -34,14 +34,24 @@ require('nvim-tree').setup {
   end,
 }
 
+_G.started_from_stdin = false
+
+vim.api.nvim_create_autocmd({ 'StdinReadPre' }, {
+  callback = function()
+    _G.started_from_stdin = true
+  end,
+})
+
 vim.api.nvim_create_autocmd({ 'VimEnter' }, {
   callback = function(data)
-    if vim.fn.isdirectory(data.file) == 1 then
-      return
+    local started_in_dir = function()
+      return vim.fn.isdirectory(data.file) == 1
+    end
+    local file_not_under_cwd = function()
+      return data.file ~= '' and vim.fn.fnamemodify(data.file, ':p:h') ~= vim.fn.getcwd()
     end
 
-    -- if a file is opened and opened file's directory is not a subpath of the current working directory, then return
-    if data.file ~= '' and vim.fn.fnamemodify(data.file, ':p:h') ~= vim.fn.getcwd() then
+    if _G.started_from_stdin or started_in_dir() or file_not_under_cwd() then
       return
     end
 
@@ -53,11 +63,11 @@ vim.api.nvim_create_autocmd({ 'VimEnter' }, {
 
 vim.api.nvim_create_autocmd({ 'BufEnter' }, {
   callback = function()
-    if vim.fn.winnr '$' == 1 and vim.bo.filetype == 'NvimTree' then
+    if vim.fn.winnr '$' == 1 and vim.bo.filetype == 'NvimTree' and vim.fn.argv(0, vim.fn.winnr '$') ~= 'NvimTree_1' then
       vim.cmd 'quit'
     end
   end,
 })
 
-vim.keymap.set('n', '<leader>n', ':NvimTreeToggle<cr>')
+vim.keymap.set('n', '<leader>n', ':NvimTreeFocus<cr>')
 vim.keymap.set('n', '<leader>m', ':NvimTreeFindFile<cr>')

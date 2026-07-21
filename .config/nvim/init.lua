@@ -276,6 +276,7 @@ do
   vim.keymap.set('n', '<C-d>', '<C-d>zz')
   vim.keymap.set('n', 'n', 'nzz')
   vim.keymap.set('n', 'N', 'Nzz')
+  vim.keymap.set('n', 'gg', 'gg0')
   vim.keymap.set('n', '<F1>', '<Nop>')
   vim.keymap.set('i', '<F1>', '<Nop>')
   vim.keymap.set('n', 'j', 'gj')
@@ -557,7 +558,7 @@ do
   local builtin = require 'telescope.builtin'
 
   local grep = function()
-    require('telescope.builtin').live_grep {
+    builtin.live_grep {
       vimgrep_arguments = {
         'rg',
         '--color=never',
@@ -566,18 +567,39 @@ do
         '--line-number',
         '--column',
         '--smart-case',
-        '-uu',
+        '--follow',
+        '--hidden',
       },
     }
   end
 
+  local function get_current_visual_selection()
+    vim.cmd [[silent normal! "zy]]
+    return vim.fn.getreg 'z'
+  end
+
   vim.keymap.set('n', '<leader>s', grep, { desc = '[s]earch by grep' })
   vim.keymap.set('n', '<leader>S', grep, { desc = '[S]earch by grep' })
-  vim.keymap.set('n', '<leader>j', '<cmd>lua require("telescope.builtin").grep_string({search = vim.fn.expand("<cword>")})<cr>')
-  vim.keymap.set('n', '<leader>f', builtin.git_files)
-  vim.keymap.set('n', '<leader>F', '<cmd>lua require("telescope.builtin").find_files({follow = true})<cr>')
-  vim.keymap.set('n', '<leader>qr', '<cmd>lua require("telescope.builtin").oldfiles()<cr>')
-  vim.keymap.set('n', '<leader>qe', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
+  vim.keymap.set('n', '<leader>j', function()
+    builtin.grep_string { search = vim.fn.expand '<cword>', follow = true, hidden = true }
+  end, { desc = '[j]ump to word under cursor' })
+  vim.keymap.set('v', '<leader>j', function()
+    builtin.grep_string { search = get_current_visual_selection(), follow = true, hidden = true }
+  end, { desc = '[j]ump to word under cursor' })
+  vim.keymap.set('n', '<leader>f', function()
+    if vim.fn.isdirectory '.git' == 1 then
+      builtin.git_files { follow = true, hidden = true }
+    else
+      builtin.find_files { follow = true, hidden = true }
+    end
+  end)
+  vim.keymap.set('n', '<leader>F', function()
+    builtin.find_files { follow = true, hidden = true }
+  end)
+  vim.keymap.set('n', '<leader>qr', function()
+    builtin.oldfiles()
+  end)
+  vim.keymap.set('n', '<leader>qe', builtin.resume, { desc = '[S]earch [R]esume' })
 
   -- Add Telescope-based LSP pickers when an LSP attaches to a buffer.
   -- If you later switch picker plugins, this is where to update these mappings.

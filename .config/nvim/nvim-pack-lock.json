@@ -4,6 +4,10 @@
       "rev": "e30b7f2008e52442154b66f7c519bfd2f1e32acb",
       "src": "https://github.com/numToStr/Comment.nvim"
     },
+    "CopilotChat.nvim": {
+      "rev": "f0c2a23ab79dc295f5e0eef0d8b587a39020c852",
+      "src": "https://github.com/CopilotC-Nvim/CopilotChat.nvim"
+    },
     "LuaSnip": {
       "rev": "642b0c595e11608b4c18219e93b88d7637af27bc",
       "src": "https://github.com/L3MON4D3/LuaSnip",

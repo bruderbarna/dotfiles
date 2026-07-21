@@ -152,6 +152,10 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
     add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
 
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
+
 # ----------------------------
 # OS
 # ----------------------------
@@ -188,7 +192,7 @@ mvn() {
   if [[ -x ./mvnw ]]; then
     ./mvnw "$@"
   else
-    printf '\033[1;33m\n  ⚠  WARNING: no ./mvnw — using global mvn\n\033[0m' >&2
+    printf '\033[1;33m\n  ⚠  WARNING: no ./mvnw — using global mvn\n\n\033[0m' >&2
     command mvn "$@"
   fi
 }
@@ -197,7 +201,7 @@ gradle() {
   if [[ -x ./gradlew ]]; then
     ./gradlew "$@"
   else
-    printf '\033[1;33m\n  ⚠  WARNING: no ./gradlew — using global gradle\n\033[0m' >&2
+    printf '\033[1;33m\n  ⚠  WARNING: no ./gradlew — using global gradle\n\n\033[0m' >&2
     command gradle "$@"
   fi
 }
@@ -219,7 +223,6 @@ alias vim='nvim'
 
 if [[ "$OS" == "Darwin" ]]; then
   alias xo='open'
-  alias htop='open -a Neohtop'
 else
   alias xo='xdg-open'
 fi
@@ -337,7 +340,7 @@ export SDKMAN_DIR="$HOME/.sdkman"
 # cloudsmith
 # ----------------------------
 
-export CLOUDSMITH_REPOSITORY=114-aiis_general-d
+export CLOUDSMITH_REPOSITORY=114-aiis_global-d
 
 # ----------------------------
 # fnm
