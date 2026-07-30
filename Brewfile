@@ -36,6 +36,8 @@ brew "rust"
 brew "pipx"
 brew "glab"
 brew "cloudsmith-cli"
+brew "shellcheck"
+brew "dotnet-sdk"
 
 brew "kubernetes-cli"
 brew "minikube"
@@ -45,7 +47,6 @@ brew "derailed/k9s/k9s"
 brew "stern"
 
 brew "httpie"
-brew "colima", restart_service: :changed
 brew "docker"
 brew "docker-compose"
 brew "docker-buildx"
@@ -56,7 +57,3 @@ cask "font-jetbrains-mono-nerd-font"
 cask "containerized-applications/tap/conapp"
 
 go "github.com/bruderbarna/tms"
-
-npm "@openapitools/openapi-generator-cli"
-npm "corepack"
-npm "pnpm"

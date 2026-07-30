@@ -178,6 +178,8 @@ path=(
   "$HOME/go/bin"
   "$HOME/.local/bin"
   "$HOME/dotfiles/bin"
+  "$HOME/.dotnet"
+  "$HOME/.dotnet/tools"
 
   $path
 )
@@ -343,21 +345,6 @@ export SDKMAN_DIR="$HOME/.sdkman"
 export CLOUDSMITH_REPOSITORY=114-aiis_global-d
 
 # ----------------------------
-# fnm
-# ----------------------------
-
-export PATH="/Users/barna.bruder/.local/state/fnm_multishells/24880_1783519281633/bin":$PATH
-export FNM_MULTISHELL_PATH="/Users/barna.bruder/.local/state/fnm_multishells/24880_1783519281633"
-export FNM_VERSION_FILE_STRATEGY="local"
-export FNM_DIR="/Users/barna.bruder/.local/share/fnm"
-export FNM_LOGLEVEL="info"
-export FNM_NODE_DIST_MIRROR="https://nodejs.org/dist"
-export FNM_COREPACK_ENABLED="false"
-export FNM_RESOLVE_ENGINES="true"
-export FNM_ARCH="arm64"
-rehash
-
-# ----------------------------
 # tmux url select
 # ----------------------------
 
@@ -396,3 +383,44 @@ t() {
       --preview 'sesh preview {}'
   )"
 }
+
+# ----------------------------
+# server fns
+# ----------------------------
+
+server() {
+  local dir="$1"
+  shift # args are now the cmd
+
+  if [ "$1" = "cd" ]; then
+    cd "$dir"
+  else
+    (cd "$dir" && "$@")
+  fi
+}
+
+dct() {
+  local dir=~/work/dct/dct-service
+  local default_cmd=(
+    mvn
+    spring-boot:run
+    -Plocal
+    -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=local"
+  )
+
+  local -a cmd
+  if (($#)); then
+    cmd=("$@")
+  else
+    cmd=("${default_cmd[@]}")
+  fi
+
+  server "$dir" "${cmd[@]}"
+}
+
+# ----------------------------
+# dotnet
+# ----------------------------
+
+export DOTNET_ROOT_ARM64="$HOME/.dotnet"
+export DOTNET_ROOT="$HOME/.dotnet"

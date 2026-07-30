@@ -12,7 +12,6 @@ startup_command = "eza --tree --long --level=1 --icons --all --color=always --gi
 name = "nvim"
 path = "~/dotfiles/.config/nvim"
 
-
 [[session]]
 name = "dotfiles"
 path = "~/dotfiles"
