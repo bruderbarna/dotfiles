@@ -30,10 +30,6 @@
       "rev": "a12fd5672110c8aa7e3c8419e28c96943ca179be",
       "src": "https://github.com/github/copilot.vim"
     },
-    "easy-dotnet.nvim": {
-      "rev": "5823c50d0de015c01f591319f6e846506518165e",
-      "src": "https://github.com/GustavEikaas/easy-dotnet.nvim"
-    },
     "fidget.nvim": {
       "rev": "889e2e96edef4e144965571d46f7a77bcc4d0ddf",
       "src": "https://github.com/j-hui/fidget.nvim"

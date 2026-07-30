@@ -61,6 +61,20 @@ if $sesh_installed; then
   FPATH="$HOME/.sesh/completions:$FPATH"
 fi
 
+# --- flyctl ---
+flyctl_installed=false
+command -v flyctl >/dev/null 2>&1 && flyctl_installed=true
+
+if $flyctl_installed; then
+  if [ ! -f "$HOME/.flyctl/completions/_flyctl" ]; then
+    if [ ! -f "$HOME/.flyctl/completions" ]; then
+      mkdir -p "$HOME/.flyctl/completions"
+    fi
+    flyctl completion zsh > "$HOME/.flyctl/completions/_flyctl"
+  fi
+  FPATH="$HOME/.flyctl/completions:$FPATH"
+fi
+
 # --- init zsh completion ---
 autoload -Uz compinit
 compinit
@@ -74,6 +88,9 @@ if $kubectl_installed; then
 fi
 if $terraform_installed; then
   compdef tf=terraform
+fi
+if $flyctl_installed; then
+  compdef fly=flyctl
 fi
 
 zstyle ':completion:*' completer _complete _approximate
@@ -178,8 +195,8 @@ path=(
   "$HOME/go/bin"
   "$HOME/.local/bin"
   "$HOME/dotfiles/bin"
-  "$HOME/.dotnet"
-  "$HOME/.dotnet/tools"
+  "$HOME/dotfiles/scripts"
+  "$HOME/.local/share/gem/ruby/3.0.0/bin"
 
   $path
 )
@@ -251,6 +268,22 @@ else
 fi
 
 export BROWSER="$CHROME_BIN"
+
+export ANDROID_HOME="$HOME/Android/Sdk"
+export ANDROID_SDK_HOME="$HOME/Android/Sdk"
+
+export FLYCTL_INSTALL="/home/barna/.fly"
+export PATH="$FLYCTL_INSTALL/bin:$PATH"
+
+# ----------------------------
+# Direnv
+# ----------------------------
+
+if command -v direnv &>/dev/null; then
+  eval "$(direnv hook bash)"
+else
+  _warn_missing direnv
+fi
 
 # ----------------------------
 # Cargo
@@ -383,44 +416,3 @@ t() {
       --preview 'sesh preview {}'
   )"
 }
-
-# ----------------------------
-# server fns
-# ----------------------------
-
-server() {
-  local dir="$1"
-  shift # args are now the cmd
-
-  if [ "$1" = "cd" ]; then
-    cd "$dir"
-  else
-    (cd "$dir" && "$@")
-  fi
-}
-
-dct() {
-  local dir=~/work/dct/dct-service
-  local default_cmd=(
-    mvn
-    spring-boot:run
-    -Plocal
-    -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=local"
-  )
-
-  local -a cmd
-  if (($#)); then
-    cmd=("$@")
-  else
-    cmd=("${default_cmd[@]}")
-  fi
-
-  server "$dir" "${cmd[@]}"
-}
-
-# ----------------------------
-# dotnet
-# ----------------------------
-
-export DOTNET_ROOT_ARM64="$HOME/.dotnet"
-export DOTNET_ROOT="$HOME/.dotnet"

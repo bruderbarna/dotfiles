@@ -8,14 +8,21 @@
 	dlc = "!git diff @~1 @"
 
 [user]
-	email = barna.bruder@aldi-sued.com
-	name = Barna Bruder
+	email = bruder.barna@flexboxapp.com
+	name = Bruder Barna
 
 [core]
 	excludesfile = ~/.config/git/ignore
 
 [push]
 	autoSetupRemote = true
+
+[init]
+	defaultBranch = main
+[credential "https://msface.visualstudio.com"]
+	username = pat
+	helper =
+	helper = "!f() { test \"$1\" = get && echo \"password=REDACTED\"; }; f"
 
 [pull]
 	ff = only
