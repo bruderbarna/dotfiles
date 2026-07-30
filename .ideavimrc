@@ -1,9 +1,8 @@
-" ~/.ideavimrc — mirrors what's simple to carry over from init.lua
-
 let mapleader = ","
 let maplocalleader = ","
 
-" -- options (mirrors SECTION 1 of init.lua) --
+nnoremap <leader>si :source ~/.ideavimrc<CR>
+
 set number
 set ignorecase
 set smartcase
@@ -14,11 +13,9 @@ set nowrap
 set clipboard+=unnamed
 set showmode
 
-" IdeaVim extensions, roughly standing in for mini.surround / mini.ai / gitsigns
+" plugins
 set surround
 set commentary
-set argtextobj
-set exchange
 set ideajoin
 set NERDTree
 
@@ -35,25 +32,40 @@ nnoremap <C-k> <C-w>k
 vnoremap > >gv
 vnoremap < <gv
 
-" centered half-page scroll / search jumps
-nnoremap <C-u> <C-u>zz
-nnoremap <C-d> <C-d>zz
+" centered search jumps
 nnoremap n nzz
 nnoremap N Nzz
 
 " paste in visual mode without yanking the replaced text
 xnoremap p P
 
-" -- IDE-equivalents for the LSP-ish mappings from init.lua --
+" idea maps
+nnoremap gd :action GotoDeclaration<CR>
 nnoremap gd :action GotoDeclaration<CR>
 nnoremap gi :action GotoImplementation<CR>
 nnoremap gr :action ShowUsages<CR>
 nnoremap gt :action GotoTypeDeclaration<CR>
-nnoremap K :action QuickJavaDoc<CR>
+nnoremap K :action ShowHoverInfo<CR>
 nnoremap <leader>rn :action RenameElement<CR>
 nnoremap <leader>ca :action ShowIntentionActions<CR>
 nnoremap <leader>e :action ShowErrorDescription<CR>
 nnoremap <leader>q :action ActivateProblemsViewToolWindow<CR>
-nnoremap <leader>s :action FindInPath<CR>
-nnoremap <leader>f :action GotoFile<CR>
+nnoremap <leader>s :action Television.Channel.Text<CR>
+vnoremap <leader>s :action Television.Channel.Text<CR>
+nnoremap <leader>j :action Television.Channel.Text<CR>
+vnoremap <leader>j :action Television.Channel.Text<CR>
+nnoremap <leader>f :action Television.Channel.Files<CR>
 nnoremap <leader>a :action Switcher<CR>
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <leader>m :NERDTreeFind<CR>
+
+command! Q :q
+command! Qa :qall
+command! QA :qall
+command! Qall :qall
+command! QAll :qall
+command! W :w
+command! Wa :wa
+command! Wq :wq
+command! WQa :wqa
+command! WQA :wqa

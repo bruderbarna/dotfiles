@@ -1,3 +1,4 @@
 zsh-users/zsh-autosuggestions
 woefe/git-prompt.zsh
 zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-completions

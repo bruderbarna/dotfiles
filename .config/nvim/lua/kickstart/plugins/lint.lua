@@ -3,6 +3,21 @@
 vim.pack.add { 'https://github.com/mfussenegger/nvim-lint' }
 
 local lint = require 'lint'
+
+lint.linters.helm_lint = {
+  name = 'helm_lint',
+  cmd = 'helm',
+  stdin = false,
+  args = { 'lint', '.' },
+  stream = 'stdout',
+  ignore_exitcode = true,
+  parser = require('lint.parser').from_pattern(
+    [[%f[%w]%s*(%S+):(%d+):(%d+):%s*(.*)]],
+    { 'filename', 'lnum', 'col', 'message' },
+    { lnum = tonumber, col = tonumber }
+  ),
+}
+
 lint.linters_by_ft = {
   markdown = { 'markdownlint' },
   lua = { 'luacheck' },
@@ -13,6 +28,7 @@ lint.linters_by_ft = {
   terraform = { 'tflint' },
   bash = { 'shellcheck' },
   sh = { 'shellcheck' },
+  helm = { 'helm_lint' },
 }
 
 -- To allow other plugins to add linters to require('lint').linters_by_ft,

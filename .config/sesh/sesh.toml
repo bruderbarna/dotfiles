@@ -1,0 +1,17 @@
+#:schema https://github.com/joshmedeski/sesh/raw/main/sesh.schema.json
+
+blacklist = ["scratch"]
+dir_length = 2
+git_dir_length = 2
+
+[default_session]
+preview_command = "eza --tree --long --level=2 --icons --all --color=always --git --git-ignore {}"
+startup_command = "eza --tree --long --level=1 --icons --all --color=always --git --git-ignore {}"
+
+[[session]]
+name = "nvim"
+path = "~/dotfiles/.config/nvim"
+
+[[session]]
+name = "dotfiles"
+path = "~/dotfiles"

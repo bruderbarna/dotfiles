@@ -2,8 +2,79 @@
 # Completion
 # ----------------------------
 
+autoload -U +X bashcompinit && bashcompinit
+
+# --- docker ---
+docker_installed=false
+command -v docker >/dev/null 2>&1 && docker_installed=true
+
+if $docker_installed; then
+  if [ ! -f "$HOME/.docker/completions/_docker" ]; then
+    if [ ! -f "$HOME/.docker/completions" ]; then
+      mkdir -p "$HOME/.docker/completions"
+    fi
+    docker completion zsh > "$HOME/.docker/completions/_docker"
+  fi
+  FPATH="$HOME/.docker/completions:$FPATH"
+fi
+
+# --- kubectl ---
+kubectl_installed=false
+command -v kubectl >/dev/null 2>&1 && kubectl_installed=true
+
+if $kubectl_installed; then
+  # kubectl completion supports "zsh"
+  if [ ! -f "$HOME/.kubectl/completions/_kubectl" ]; then
+    if [ ! -f "$HOME/.kubectl/completions" ]; then
+      mkdir -p "$HOME/.kubectl/completions"
+    fi
+    kubectl completion zsh > "$HOME/.kubectl/completions/_kubectl"
+  fi
+  FPATH="$HOME/.kubectl/completions:$FPATH"
+fi
+
+# --- terraform ---
+terraform_installed=false
+command -v terraform >/dev/null 2>&1 && terraform_installed=true
+
+if $terraform_installed; then
+  if [ ! -f "$HOME/.terraform/completions/_terraform" ]; then
+    if [ ! -f "$HOME/.terraform/completions" ]; then
+      mkdir -p "$HOME/.terraform/completions"
+    fi
+    terraform completion zsh > "$HOME/.terraform/completions/_terraform"
+  fi
+  FPATH="$HOME/.terraform/completions:$FPATH"
+fi
+
+# --- sesh ---
+sesh_installed=false
+command -v sesh >/dev/null 2>&1 && sesh_installed=true
+
+if $sesh_installed; then
+  if [ ! -f "$HOME/.sesh/completions/_sesh" ]; then
+    if [ ! -f "$HOME/.sesh/completions" ]; then
+      mkdir -p "$HOME/.sesh/completions"
+    fi
+    sesh completion zsh > "$HOME/.sesh/completions/_sesh"
+  fi
+  FPATH="$HOME/.sesh/completions:$FPATH"
+fi
+
+# --- init zsh completion ---
 autoload -Uz compinit
 compinit
+
+# --- compdefs ---
+if $docker_installed; then
+  compdef d=docker
+fi
+if $kubectl_installed; then
+  compdef k=kubectl
+fi
+if $terraform_installed; then
+  compdef tf=terraform
+fi
 
 zstyle ':completion:*' completer _complete _approximate
 zstyle ':completion:*' max-errors 2 not-numeric
@@ -81,6 +152,10 @@ if (( ${+terminfo[smkx]} && ${+terminfo[rmkx]} )); then
     add-zle-hook-widget -Uz zle-line-finish zle_application_mode_stop
 fi
 
+autoload -z edit-command-line
+zle -N edit-command-line
+bindkey "^X^E" edit-command-line
+
 # ----------------------------
 # OS
 # ----------------------------
@@ -100,13 +175,12 @@ _warn_missing() { echo "WARNING: $1 is not installed" >&2 }
 typeset -U path PATH
 
 path=(
-  "$HOME/bin"
   "$HOME/go/bin"
-  "$HOME/dotfiles/scripts"
   "$HOME/.local/bin"
-  "$HOME/.local/share/gem/ruby/3.0.0/bin"
-  "$HOME/.fly/bin"
-  "$HOME/.local/share/pnpm"
+  "$HOME/dotfiles/bin"
+  "$HOME/.dotnet"
+  "$HOME/.dotnet/tools"
+
   $path
 )
 
@@ -120,7 +194,7 @@ mvn() {
   if [[ -x ./mvnw ]]; then
     ./mvnw "$@"
   else
-    printf '\033[1;33m\n  ⚠  WARNING: no ./mvnw — using global mvn\n\033[0m' >&2
+    printf '\033[1;33m\n  ⚠  WARNING: no ./mvnw — using global mvn\n\n\033[0m' >&2
     command mvn "$@"
   fi
 }
@@ -129,7 +203,7 @@ gradle() {
   if [[ -x ./gradlew ]]; then
     ./gradlew "$@"
   else
-    printf '\033[1;33m\n  ⚠  WARNING: no ./gradlew — using global gradle\n\033[0m' >&2
+    printf '\033[1;33m\n  ⚠  WARNING: no ./gradlew — using global gradle\n\n\033[0m' >&2
     command gradle "$@"
   fi
 }
@@ -147,10 +221,10 @@ alias ..='cd ..'
 alias k='kubectl'
 alias d='docker'
 alias tf='terraform'
+alias vim='nvim'
 
 if [[ "$OS" == "Darwin" ]]; then
   alias xo='open'
-  alias htop='open -a Neohtop'
 else
   alias xo='xdg-open'
 fi
@@ -162,21 +236,14 @@ fi
 export CLAUDE_CODE_TMUX_TRUECOLOR=1
 export DOCKER_BUILDKIT=1
 
-export EDITOR=vim
-export VISUAL=vim
-
-export ANDROID_HOME="$HOME/Android/Sdk"
-export ANDROID_SDK_HOME="$ANDROID_HOME"
-
-path+=("$ANDROID_HOME/platform-tools")
-
-export FLYCTL_INSTALL="$HOME/.fly"
+export EDITOR=nvim
+export VISUAL=nvim
 
 if [[ "$OS" == "Darwin" ]]; then
   [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
   export JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null)"
-  export CHROME_BIN="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  export CHROME_BIN="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 else
   export JAVA_HOME="/usr/lib/jvm/default"
   export PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig"
@@ -243,16 +310,6 @@ else
 fi
 
 # ----------------------------
-# direnv
-# ----------------------------
-
-if command -v direnv &>/dev/null; then
-  eval "$(direnv hook zsh)"
-else
-  _warn_missing direnv
-fi
-
-# ----------------------------
 # fzf
 # ----------------------------
 
@@ -269,29 +326,101 @@ else
 fi
 
 # ----------------------------
-# Completions
-# ----------------------------
-
-autoload -U +X bashcompinit && bashcompinit
-
-if command -v kubectl &>/dev/null; then
-  source <(kubectl completion zsh)
-  compdef k=kubectl
-fi
-
-if command -v terraform &>/dev/null; then
-  complete -o nospace -C terraform terraform
-  compdef tf=terraform
-fi
-
-if command -v flyctl &>/dev/null; then
-  source <(flyctl completion zsh)
-fi
-
-compdef d=docker
-
-# ----------------------------
 # Secrets
 # ----------------------------
 
 [[ -f ~/.secrets ]] && source ~/.secrets
+
+# ----------------------------
+# Sdkman init
+# ----------------------------
+
+export SDKMAN_DIR="$HOME/.sdkman"
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# ----------------------------
+# cloudsmith
+# ----------------------------
+
+export CLOUDSMITH_REPOSITORY=114-aiis_global-d
+
+# ----------------------------
+# tmux url select
+# ----------------------------
+
+export TMUX_URL_SELECT_CLIP_CMD=pbcopy
+export TMUX_URL_SELECT_OPEN_CMD=open
+
+# ----------------------------
+# zoxide
+# ----------------------------
+
+eval "$(zoxide init zsh)"
+
+# ----------------------------
+# television
+# ----------------------------
+
+source $HOME/.config/television/shell/integration.zsh
+
+# ----------------------------
+# tmux session management
+# ----------------------------
+
+t() {
+  sesh connect "$(
+    sesh list --icons | fzf-tmux -p 80%,70% \
+      --no-sort --ansi --border-label ' sesh ' --prompt '⚡  ' \
+      --header '  ^a all ^t tmux ^g configs ^x zoxide ^d tmux kill ^f find' \
+      --bind 'tab:down,btab:up' \
+      --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list --icons)' \
+      --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t --icons)' \
+      --bind 'ctrl-g:change-prompt(⚙️  )+reload(sesh list -c --icons)' \
+      --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z --icons)' \
+      --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)' \
+      --bind 'ctrl-d:execute(tmux kill-session -t {2..})+change-prompt(⚡  )+reload(sesh list --icons)' \
+      --preview-window 'right:55%' \
+      --preview 'sesh preview {}'
+  )"
+}
+
+# ----------------------------
+# server fns
+# ----------------------------
+
+server() {
+  local dir="$1"
+  shift # args are now the cmd
+
+  if [ "$1" = "cd" ]; then
+    cd "$dir"
+  else
+    (cd "$dir" && "$@")
+  fi
+}
+
+dct() {
+  local dir=~/work/dct/dct-service
+  local default_cmd=(
+    mvn
+    spring-boot:run
+    -Plocal
+    -Dspring-boot.run.jvmArguments="-Dspring.profiles.active=local"
+  )
+
+  local -a cmd
+  if (($#)); then
+    cmd=("$@")
+  else
+    cmd=("${default_cmd[@]}")
+  fi
+
+  server "$dir" "${cmd[@]}"
+}
+
+# ----------------------------
+# dotnet
+# ----------------------------
+
+export DOTNET_ROOT_ARM64="$HOME/.dotnet"
+export DOTNET_ROOT="$HOME/.dotnet"

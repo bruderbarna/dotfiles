@@ -276,6 +276,7 @@ do
   vim.keymap.set('n', '<C-d>', '<C-d>zz')
   vim.keymap.set('n', 'n', 'nzz')
   vim.keymap.set('n', 'N', 'Nzz')
+  vim.keymap.set('n', 'gg', 'gg0')
   vim.keymap.set('n', '<F1>', '<Nop>')
   vim.keymap.set('i', '<F1>', '<Nop>')
   vim.keymap.set('n', 'j', 'gj')
@@ -555,9 +556,9 @@ do
 
   -- See `:help telescope.builtin`
   local builtin = require 'telescope.builtin'
-  vim.keymap.set('n', '<leader>s', builtin.live_grep, { desc = '[S]earch by grep' })
-  vim.keymap.set('n', '<leader>S', function()
-    require('telescope.builtin').live_grep {
+
+  local grep = function()
+    builtin.live_grep {
       vimgrep_arguments = {
         'rg',
         '--color=never',
@@ -566,15 +567,39 @@ do
         '--line-number',
         '--column',
         '--smart-case',
-        '-uu',
+        '--follow',
+        '--hidden',
       },
     }
+  end
+
+  local function get_current_visual_selection()
+    vim.cmd [[silent normal! "zy]]
+    return vim.fn.getreg 'z'
+  end
+
+  vim.keymap.set('n', '<leader>s', grep, { desc = '[s]earch by grep' })
+  vim.keymap.set('n', '<leader>S', grep, { desc = '[S]earch by grep' })
+  vim.keymap.set('n', '<leader>j', function()
+    builtin.grep_string { search = vim.fn.expand '<cword>', follow = true, hidden = true }
+  end, { desc = '[j]ump to word under cursor' })
+  vim.keymap.set('v', '<leader>j', function()
+    builtin.grep_string { search = get_current_visual_selection(), follow = true, hidden = true }
+  end, { desc = '[j]ump to word under cursor' })
+  vim.keymap.set('n', '<leader>f', function()
+    if vim.fn.isdirectory '.git' == 1 then
+      builtin.git_files { follow = true, hidden = true }
+    else
+      builtin.find_files { follow = true, hidden = true }
+    end
   end)
-  vim.keymap.set('n', '<leader>j', '<cmd>lua require("telescope.builtin").grep_string({search = vim.fn.expand("<cword>")})<cr>')
-  vim.keymap.set('n', '<leader>f', builtin.git_files)
-  vim.keymap.set('n', '<leader>F', '<cmd>lua require("telescope.builtin").find_files({follow = true})<cr>')
-  vim.keymap.set('n', '<leader>qr', '<cmd>lua require("telescope.builtin").oldfiles()<cr>')
-  vim.keymap.set('n', '<leader>qe', require('telescope.builtin').resume, { desc = '[S]earch [R]esume' })
+  vim.keymap.set('n', '<leader>F', function()
+    builtin.find_files { follow = true, hidden = true }
+  end)
+  vim.keymap.set('n', '<leader>qr', function()
+    builtin.oldfiles()
+  end)
+  vim.keymap.set('n', '<leader>qe', builtin.resume, { desc = '[S]earch [R]esume' })
 
   -- Add Telescope-based LSP pickers when an LSP attaches to a buffer.
   -- If you later switch picker plugins, this is where to update these mappings.
@@ -769,7 +794,24 @@ do
 
     yamlls = {
       yaml = {
+        validate = true,
+        completion = true,
+        hover = true,
+
         customTags = {
+          '!And scalar',
+          '!If scalar',
+          '!Not scalar',
+          '!Equals scalar',
+          '!Or scalar',
+          '!FindInMap sequence',
+          '!Base64 scalar',
+          '!Cidr scalar',
+          '!Ref scalar',
+          '!Sub scalar',
+          '!GetAtt scalar',
+          '!reference',
+
           '!Equals sequence',
           '!FindInMap sequence',
           '!GetAtt',
@@ -829,6 +871,12 @@ do
         },
       },
     },
+
+    helm_ls = {
+      filetypes = { 'helm' },
+      cmd = { 'helm_ls', 'serve' },
+      root_markers = { 'Chart.yaml' },
+    },
   }
 
   vim.pack.add {
@@ -852,6 +900,7 @@ do
   vim.list_extend(ensure_installed, {
     -- language servers
     'tsgo',
+    'helm-ls',
 
     -- formatters
     'stylua',
@@ -859,12 +908,14 @@ do
     'prettier',
     'terraform',
     'shfmt',
+    'xmlformatter',
 
     -- linters
     'eslint_d',
     'shellcheck',
     'tflint',
     'markdownlint',
+    'luacheck',
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -891,7 +942,7 @@ do
       -- Disable "format_on_save lsp_fallback" for languages that don't
       -- have a well standardized coding style. You can add additional
       -- languages here or re-enable it for the disabled ones.
-      local disable_filetypes = { c = true, cpp = true }
+      local disable_filetypes = { c = true, cpp = true, xml = true }
       if disable_filetypes[vim.bo[bufnr].filetype] then
         return nil
       else
@@ -902,6 +953,11 @@ do
     end,
     default_format_opts = {
       lsp_format = 'fallback', -- Use external formatters if configured below, otherwise use LSP formatting. Set to `false` to disable LSP formatting entirely.
+    },
+    formatters = {
+      helmfmt = {
+        command = 'helmfmt',
+      },
     },
     -- You can also specify external formatters in here.
     formatters_by_ft = {
@@ -928,6 +984,8 @@ do
       terraform = { 'terraform fmt' },
       bash = { 'shfmt' },
       sh = { 'shfmt' },
+      helm = { 'helmfmt' },
+      xml = { 'xmlformatter' },
     },
   }
 
@@ -1066,6 +1124,7 @@ do
     'vim',
     'vimdoc',
     'yaml',
+    'xml',
   }
 
   require('nvim-treesitter').install(parsers)
